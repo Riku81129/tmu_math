@@ -1,1 +1,42 @@
+name: Build TMU PDF
 
+on:
+  push:
+    paths:
+      - "TMU.tex"
+      - ".latexmkrc"
+      - ".github/workflows/build-pdf.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: TMU.tex
+          args: >
+            -pdfdvi
+            -file-line-error
+            -halt-on-error
+            -interaction=nonstopmode
+
+      - name: Copy PDF
+        run: |
+          mkdir -p pdf
+          cp TMU.pdf pdf/TMU.pdf
+
+      - name: Commit PDF
+        uses: EndBug/add-and-commit@v10
+        with:
+          add: "pdf/TMU.pdf"
+          message: "Update TMU PDF"
+          default_author: github_actions
