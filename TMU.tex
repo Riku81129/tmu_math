@@ -1,0 +1,2813 @@
+\documentclass[titlepage]{jsarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\usepackage[explicit]{titlesec}
+\usepackage{ascmac}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{float}
+\usepackage{url}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{ulem}
+\usepackage{fancybox}
+\usepackage{framed}
+\usepackage[most]{tcolorbox}
+\usepackage{varwidth} 
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem}
+\usepackage[framemethod=tikz]{mdframed}
+\numberwithin{equation}{section}
+
+\newcommand{\N}{\mathbb{N}}%自然数
+\newcommand{\Z}{\mathbb{Z}}%整数
+\newcommand{\Q}{\mathbb{Q}}%有理数
+\newcommand{\R}{\mathbb{R}}%実数
+\newcommand{\C}{\mathbb{C}}%複素数
+
+\newcommand{\Ker}{\operatorname{Ker}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\defiff}{\stackrel{\mathrm{def}}{\iff}}
+
+\definecolor{sectioncolor}{RGB}{67,102,176}
+
+\titleformat{\section}
+  {\Large\bfseries\color{sectioncolor}}
+  {}
+  {0pt}
+  {\underline{\thesection\hspace{0.7em}#1}}
+
+\titleformat{name=\section,numberless}
+  {\Large\bfseries\color{sectioncolor}}
+  {}
+  {0pt}
+  {\underline{#1}}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{sectioncolor}}
+  {}
+  {0pt}
+  {\underline{\thesubsection\hspace{0.7em}#1}}
+
+\titleformat{name=\subsection,numberless}
+  {\large\bfseries\color{sectioncolor}}
+  {}
+  {0pt}
+  {\underline{#1}}
+
+\newtcbtheorem[number within=section]{thm}{定理}{%
+enhanced,
+fonttitle=\bfseries,
+colback=green!5,
+colframe=green!50!black,
+sharp corners=northwest,
+attach boxed title to top left={%
+xshift=0mm,
+yshift*=-0.5mm
+},
+varwidth boxed title*=-3mm,
+boxed title style={%
+colback=green!50!black,
+colframe=green!50!black,
+rounded corners,
+sharp corners=south,
+boxrule=0.5pt,
+},
+}{thm}
+
+% ---------- 定義環境：thm と番号共有 ----------
+\newtcbtheorem[use counter from=thm]{dfn}{定義}{%
+enhanced,
+fonttitle=\bfseries,
+colback=cyan!5,
+colframe=cyan!50!black,
+sharp corners=northwest,
+attach boxed title to top left={%
+xshift=0mm,
+yshift*=-0.5mm
+},
+varwidth boxed title*=-3mm,
+boxed title style={%
+colback=cyan!50!black,
+colframe=cyan!50!black,
+rounded corners,
+sharp corners=south,
+boxrule=0.5pt,
+},
+}{dfn}
+
+
+\newtcolorbox{lem}[2][]{%
+enhanced,
+title={#2},
+fonttitle=\bfseries,
+colback=blue!5,
+colframe=blue!50!black,
+sharp corners=northwest,
+% --- ここからタイトルの見た目調整 ---
+attach boxed title to top left={%
+xshift=0mm, % 左端から少し内側
+yshift*=-0.5mm % 枠線に半分かぶせる
+},
+varwidth boxed title*=-3mm, % タイトルの幅に合わせた小さい箱
+boxed title style={%
+colback=blue!50!black,
+colframe=blue!50!black,
+rounded corners,
+sharp corners=south,
+boxrule=0.5pt,
+},
+% --- ここまで ---
+#1
+}
+
+\newtcolorbox{ex}[2][]{%
+enhanced,
+title={#2},
+fonttitle=\bfseries,
+colback=violet!5,
+colframe=violet!50!black,
+sharp corners=northwest,
+% --- ここからタイトルの見た目調整 ---
+attach boxed title to top left={%
+xshift=0mm, % 左端から少し内側
+yshift*=-0.5mm 
+},
+varwidth boxed title*=-3mm, % タイトルの幅に合わせた小さい箱
+boxed title style={%
+colback=violet!50!black,
+colframe=violet!50!black,
+rounded corners,
+sharp corners=south,
+boxrule=0.5pt,
+},
+#1
+}
+
+\newtcolorbox{marker}{
+enhanced,
+colback=yellow!20,
+colframe=yellow!40!black,
+boxrule=0.4pt,
+left=8mm,
+overlay={
+% 左の!帯
+\fill[brown!80!black] (frame.north west) rectangle ([xshift=6mm]frame.south west);
+\node[white,font=\bfseries\Large] at ([xshift=3mm]frame.west) {!};
+% 右下折れ曲がり
+\fill[yellow!70!white]
+(frame.south east) -- ++(-6mm,0) -- ++(6mm,6mm) -- cycle;
+},
+drop shadow,
+}
+
+
+
+\newtcolorbox{problem}[1][]{
+colframe=black,
+colback=white,
+fonttitle=\bfseries,
+title=#1
+}
+
+\newmdenv[
+skipabove=\topsep,
+skipbelow=\topsep,
+leftline=true, % 左の線だけ true
+rightline=false,
+topline=false,
+bottomline=false,
+linecolor=gray!70,
+linewidth=2pt,
+innerleftmargin=5mm,
+innerrightmargin=0mm,
+innertopmargin=1ex,
+innerbottommargin=1ex,
+]{proofbox}
+
+% ---- 解答環境のカスタマイズ ----------------------------
+% proofbox とまったく同じ見た目で「解.」と出る環境
+
+\newenvironment{kaitou}[1][解]{%
+\begin{proofbox}%
+\textit{#1. }\ignorespaces
+}{%
+\hfill$\diamondsuit$%
+\end{proofbox}%
+}
+\newtcolorbox{answerbox}{
+colback=white,
+colframe=black,
+boxrule=0.5pt,
+arc=1mm,
+left=2mm,
+right=2mm,
+top=1mm,
+bottom=1mm
+}
+
+% dvipdfmxは日本語のときのみかく
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper} % (u)pLaTeXのときのみかく
+\hypersetup{%
+ setpagesize=false,%
+ bookmarks=true,%
+ bookmarksdepth=tocdepth,%
+ bookmarksnumbered=true,%
+ colorlinks=true,%
+ linkcolor=magenta,
+ pdftitle={},%
+ pdfsubject={},%
+ pdfauthor={},%
+ pdfkeywords={}}
+
+
+\title{都立大数理 院試解答メモ}
+\author{Riku Araki}
+\date \today
+
+\begin{document}
+\maketitle
+\setcounter{section}{-1}
+\refstepcounter{section}
+\section*{\thesection\hspace{0.7em}前書き}
+\subsection*{\thesubsection\hspace{0.7em}謝辞}
+共に勉強してくれた友人および先輩, 特に齋藤剣生くん, 杉崎弥寿くん, 杉江愛菜さん, 望月梨華さんに感謝します. 
+\subsection*{\thesubsection\hspace{0.7em}記号}
+\begin{problem}
+\textbf{問題.}\quad 問題文は適宜省略していますが, 本質的な改変はしていません.
+\end{problem}
+\begin{kaitou}
+解答部分には横線があります. 
+\end{kaitou}
+\begin{dfn}{}{}
+\end{dfn}
+\begin{thm}{}{}
+\end{thm}
+\begin{proof}
+\end{proof}
+\begin{ex}{例:}
+\end{ex}
+\begin{marker}
+注意書き及び考察
+\end{marker}
+
+\newpage
+\tableofcontents
+\newpage
+\section{2026年度}
+\subsection{問題1}
+\begin{problem}
+\textbf{TMU2026年度I 問題1.}\\
+実数を成分にもつ$2$次正方行列全体のなす実ベクトル空間を$V$とし, また$k$を実数とする. $B\in V$とし, ベクトル$\bm{x}\in\mathbb{R}^2$は$B\bm{x}=k\bm{x}$を満たすとする. $V$の部分空間$W$を
+\[
+W=\{A\in V\mid {}^t \bm{x}A\bm{x}=0\}
+\]
+によって定める. 以下の問いに答えよ.
+\begin{enumerate}[label=(\arabic*)]
+    \item $A\in W$であれば, ${}^t\!BAB\in W$であることを示せ.
+
+    \item 以下,
+    \[
+    B=
+    \begin{pmatrix}
+    k-2 & 4\\
+    -1 & k+2
+    \end{pmatrix},
+    \qquad
+    \bm{x}=
+    \begin{pmatrix}
+    2\\
+    1
+    \end{pmatrix}
+    \]
+    とせよ.
+    
+    \begin{enumerate}[label=(\alph*)]
+        \item $W$の基底を一組求めよ.
+
+        \item 線形写像$f\colon W\to W$を
+        \[
+        A\mapsto {}^t\!BAB
+        \]
+        によって定義する. $f$が同型でないような$k$の値をすべて求めよ.
+    \end{enumerate}
+\end{enumerate}
+\end{problem}
+\begin{kaitou}[(1)の解]
+$A \in W$, すなわち${}^t \bm{x}A\bm{x} = 0$とする. このとき
+\begin{align*}
+{}^t\bm{x}({}^t\!BAB)\bm{x} = ({}^t\bm{x}{}^t\!B)A(B\bm{x}) = {}^t\!(B\bm{x})A(B\bm{x}) = k^2 ({}^t\bm{x}A\bm{x}) = 0
+\end{align*}
+より, ${}^t\!BAB\in W$が従う.
+\end{kaitou}
+\begin{kaitou}[(2-a)の解]
+$A = 
+\begin{pmatrix}
+a & b\\
+c & d
+\end{pmatrix}$
+($a, b, c, d \in \R$) とすれば
+\begin{align}
+A \in W \iff
+\begin{pmatrix}
+2 & 1
+\end{pmatrix}
+\begin{pmatrix}
+a & b\\
+c & d
+\end{pmatrix}
+\begin{pmatrix}
+2\\
+1
+\end{pmatrix}
+= 0
+\iff 4a + 2(b + c) + d = 0 \label{eq:tmu2026-1a}
+\end{align}
+なので, 
+\[
+W=
+\left\{
+\begin{pmatrix}
+a & b\\
+c & -4a - 2(b+c)
+\end{pmatrix}
+\,
+\middle|
+\,
+a, b, c \in \R
+\right\}
+=
+\left\langle
+\begin{pmatrix}
+1 & 0\\
+0 & -4
+\end{pmatrix},
+\begin{pmatrix}
+0 & 1\\
+0 & -2
+\end{pmatrix},
+\begin{pmatrix}
+0 & 0\\
+1 & -2
+\end{pmatrix}
+\right\rangle_\R
+\]
+つまり
+\begin{answerbox}
+$W$の基底 : 
+\[
+\left\{
+\begin{pmatrix}
+1 & 0\\
+0 & -4
+\end{pmatrix},
+\begin{pmatrix}
+0 & 1\\
+0 & -2
+\end{pmatrix},
+\begin{pmatrix}
+0 & 0\\
+1 & -2
+\end{pmatrix}
+\right\}
+\]
+\end{answerbox}
+である.
+\end{kaitou}
+(2-a)で$W$の基底を求めたので, 計算量は多くなるが, $f$の表現行列を求める方針は自然に思える.
+\begin{kaitou}[(2-b)の解]
+$f$が同型でない, つまり$f$が全単射でない$k$を求める. (2-a)より
+\[
+E_1=
+\begin{pmatrix}
+1 & 0\\
+0 & -4
+\end{pmatrix}
+,\:
+E_2=
+\begin{pmatrix}
+0 & 1\\
+0 & -2
+\end{pmatrix}
+,\:
+E_3=
+\begin{pmatrix}
+0 & 0\\
+1 & -2
+\end{pmatrix}
+\]
+とすれば, $\left\{ E_1, E_2, E_3 \right\}$は$W$の基底であった. まずはこの基底に関する$f$の表現行列を求めよう.
+\begin{align*}
+f(E_1) = 
+\begin{pmatrix}
+k(k-4) & 8k\\
+8k & -4k(k+4)
+\end{pmatrix}
+,\:
+f(E_2) = 
+\begin{pmatrix}
+-k & k(k+2)\\
+2k & -2k(k+2)
+\end{pmatrix}
+,\:
+f(E_3) =
+\begin{pmatrix}
+-k & 2k\\
+k(k+2) & -2k(k+2)
+\end{pmatrix}
+\end{align*}
+であり, 表現行列を$C \in M_3(\R)$とすれば
+\begin{align*}
+\left(f(E_1)\: f(E_2)\:f(E_3)\right) &=
+\left(
+\begin{pmatrix}
+k(k-4) & 8k\\
+8k & -4k(k+4)
+\end{pmatrix}\:
+\begin{pmatrix}
+-k & k(k+2)\\
+2k & -2k(k+2)
+\end{pmatrix}\:
+\begin{pmatrix}
+-k & 2k\\
+k(k+2) & -2k(k+2)
+\end{pmatrix}
+\right)\\
+&=
+\left(
+\begin{pmatrix}
+1 & 0\\
+0 & -4
+\end{pmatrix}\:
+\begin{pmatrix}
+0 & 1\\
+0 & -2
+\end{pmatrix}\:
+\begin{pmatrix}
+0 & 0\\
+1 & -2
+\end{pmatrix}
+\right)
+\begin{pmatrix}
+k(k-4) & -k & -k\\
+8k & k(k+2) & 2k\\
+8k & 2k & k(k+2)
+\end{pmatrix}\\
+&=
+\left( E_1\:E_2\:E_3\right) C
+\end{align*}
+となる. このとき
+\[
+f\text{が全単射} \iff C\text{が正則} \iff \det C \ne 0
+\]
+なので
+\[
+\det C = 
+k^3 \det 
+\begin{pmatrix}
+k-4 & -1 & -1\\
+8 & k+2 & 2\\
+8 & 2 & k+2
+\end{pmatrix}
+= \cdots = k^6
+\]
+から\boxed{k=0}\,のときに限り$f$は全単射でない.
+\end{kaitou}
+$W$の基底は使わずに, 「$f$は全単射 $\iff$ 逆写像$f^{-1}$が存在」という事実を用いる方法もある : 
+\begin{kaitou}[(2-a)の別解]
+$f$が全単射でない, すなわち逆写像$f^{-1}$が存在しないような$k$を求めればよい. \\
+\uline{$B$が正則のとき}, つまり
+\begin{align*}
+B\text{が正則} \iff \det B \ne 0 \iff k \ne 0
+\end{align*}
+より$k \ne 0$のときは, 線形写像$g$を
+\[
+g : W \to W ; A \mapsto {}^t (B^{-1})AB^{-1}
+\]
+と定めれば
+\begin{align*}
+(g \circ f) (A) &= g({}^t\!BAB) = {}^t (B^{-1})({}^t\!BAB)B^{-1} = {}^t(BB^{-1})A(BB^{-1}) = A,\\
+(f \circ g) (A) &= f({}^t (B^{-1})AB^{-1}) = {}^t\!B({}^t (B^{-1})AB^{-1})B = {}^t (B^{-1}B)A(B^{-1}B) = A
+\end{align*}
+なので$f^{-1} = g$が存在する. あとは\uline{$B$が正則にならない}$k = 0$, すなわち
+\[
+B = 
+\begin{pmatrix}
+-2 & 4\\
+-1 & 2
+\end{pmatrix}
+\]
+の場合を考えればよい. このとき
+\[
+\forall \bm{u} \in \R^2.\,B\bm{u} \in \langle \bm{x} \rangle_{\R} 
+\]
+であり, 任意の$A \in W$, 任意の$\bm{u}, \bm{v} \in \R^2$に対して
+\[
+{}^t\bm{u}{}^t\!BAB\bm{v} = {}^t (B\bm{u})AB\bm{v} = 0\qquad(W\text{の定め方より})
+\]
+が成り立つので, ${}^t\!BAB = O$となる.\footnote{$\bm{u}, \bm{v}$に単位ベクトルを代入することで簡単にわかる.} したがって$\dim (\Im f) = 0$だから, \boxed{k = 0}\,のときに限り$f$は同型でない.
+\end{kaitou}
+\begin{marker}
+上の設定で
+\[
+f\text{が同型} \iff B\text{は正則}
+\]
+が成り立つことは正しそうだが, 証明が大変なので具体的な$B$に対し単射にならないことを示した. また, $V = M_n(\R)$としてもこのことは成り立つ. $A \ne O$かつ${}^t\!BAB = O$となる$A$の存在を示せばよい.
+\end{marker}
+\begin{marker}
+上の別解で$B$が正則でないとき, $\Im B \in \langle\bm{x}\rangle$に気が付かなくても, 直接計算すれば$f$が全単射でないことがわかる. 実際, 再び$A = 
+\begin{pmatrix}
+a & b\\
+c & d
+\end{pmatrix}$
+とおいて${}^t\!BAB$を計算すれば,
+\[
+{}^tBAB = 
+\begin{pmatrix}
+-2 & -1 \\
+4 & 2
+\end{pmatrix}
+\begin{pmatrix}
+a & b\\
+c & d
+\end{pmatrix}
+\begin{pmatrix}
+-2 & 4\\
+-1 & 2
+\end{pmatrix}
+=
+\begin{pmatrix}
+4a +  2c + 2b + d & -8a -4c -4b -2d\\
+-8a -4c -4b -2d & 16a + 8c + 8b +4d
+\end{pmatrix}
+\]
+なので, \eqref{eq:tmu2026-1a}より任意の$A \in W$について${}^t\!BAB = O$がわかる.
+\end{marker}
+\subsection{問題2}
+\begin{problem}
+\textbf{TMU2026年度I 問題2.}\\
+$3$次実対称行列$A$を
+\[
+A=
+\begin{pmatrix}
+1 & 2 & 0\\
+2 & 2 & 2\\
+0 & 2 & 3
+\end{pmatrix}
+\]
+により定める. また, 関数$R\colon\mathbb{R}^3\setminus\{\bm{0}\}\to\mathbb{R}$を$\bm{x}\in\mathbb{R}^3\setminus\{\bm{0}\}$に対して,
+\[
+R(\bm{x})=\frac{{}^t\bm{x}A\bm{x}}{{}^t\bm{x}\bm{x}}
+\]
+により定める. 
+
+\begin{enumerate}[label=(\arabic*)]
+    \item 行列$A$の固有値を求め, 各固有値に対する固有ベクトルで長さが$1$のものを$1$つずつ求めよ.
+
+    \item (1)で求めた固有ベクトル$\bm{v}_1, \bm{v}_2, \bm{v}_3$を並べて行列
+    $
+    P=(\bm{v}_1\,\bm{v}_2\,\bm{v}_3)
+    $
+    とする. 
+    $
+    \bm{x}=
+    \begin{pmatrix}
+    x_1\\
+    x_2\\
+    x_3
+    \end{pmatrix}
+    $
+    とするとき, $R(P\bm{x})$を$x_1,x_2,x_3$を用いて表せ.
+
+    \item 関数$R$の最大値と最小値を求めよ.
+\end{enumerate}
+\end{problem}
+$A$は対称行列なので直交対角化可能であり, 実際(1)では直交行列を求めることになる.
+\begin{kaitou}[(1)の解]
+$A$の固有多項式は$\phi_A(\lambda) = (\lambda + 1)(\lambda - 2)(\lambda-5)$なので, 固有値は\boxed{-1, 2, 5}である. \uline{$-1$に対する固有ベクトル}として
+\[
+A+E = 
+\begin{pmatrix}
+2 & 2 & 0\\
+2 & 3 & 2\\
+0 & 2 & 4
+\end{pmatrix}
+\stackrel{\text{行基本変形}}{\sim}
+\begin{pmatrix}
+1 & 0 & -2\\
+0 & 1 & 2\\
+0 & 0 & 0
+\end{pmatrix}
+\]
+より
+\[
+\tilde{\bm{v}}_1 = 
+\begin{pmatrix}
+2\\
+-2\\
+1
+\end{pmatrix},
+\]
+\uline{$2$に対する固有ベクトル}として
+\[
+A - 2E =
+\begin{pmatrix}
+-1 & 2 & 0\\
+2 & 0 & 2\\
+0 & 2 & 1
+\end{pmatrix}
+\stackrel{\text{行基本変形}}{\sim}
+\begin{pmatrix}
+1 & 0 & 1\\
+0 & 1 & 1/2\\
+0 & 0& 0
+\end{pmatrix}
+\]
+より
+\[
+\tilde{\bm{v}}_2 =
+\begin{pmatrix}
+-2\\
+-1\\
+2
+\end{pmatrix},
+\]
+\uline{$5$に対する固有ベクトル}として
+\[
+A - 5E = 
+\begin{pmatrix}
+-4 & 2 & 0\\
+2 & -3 & 2\\
+0 & 2 & -2
+\end{pmatrix}
+\stackrel{\text{行基本変形}}{\sim}
+\begin{pmatrix}
+1 & 0 & -1/2\\
+0 & 1 & -1\\
+0 & 0 & 0
+\end{pmatrix}
+\]
+より
+\[
+\tilde{\bm{v}}_3 = 
+\begin{pmatrix}
+1\\
+2\\
+2
+\end{pmatrix}
+\]
+が取れて, $\tilde{\bm{v}}_1, \tilde{\bm{v}}_2, \tilde{\bm{v}}_3$を正規化すれば
+\begin{answerbox}
+\begin{align*}
+\bm{v}_1 =
+\dfrac{1}{3}
+\begin{pmatrix}
+2\\
+-2\\
+1
+\end{pmatrix},\qquad
+\bm{v}_2 =
+\dfrac{1}{3}
+\begin{pmatrix}
+-2\\
+-1\\
+2
+\end{pmatrix},\qquad
+\bm{v}_3 =
+\dfrac{1}{3}
+\begin{pmatrix}
+1\\
+2\\
+2
+\end{pmatrix}
+\end{align*}
+\end{answerbox}
+を得る.
+\end{kaitou}
+$A$は$3$次実対称行列であり, $3$つの相異なる固有値が存在するので, (異なる固有値に属する)$\bm{v}_1, \bm{v}_2, \bm{v}_3$は互いに直交する. \textit{Gram-Schmidt}の直交化法を使う必要がないので, 非常にありがたい.
+\begin{kaitou}[(2)の解]
+$\{\bm{v}_1, \bm{v}_2, \bm{v}_3\}$は$A$の固有ベクトルからなる正規直交基底なので, その元を並べた$P = (\bm{v}_1\,\bm{v}_2\,\bm{v}_3)$は直交行列であり, 
+\begin{align}
+{}^t\!PAP = P^{-1}AP = 
+\begin{pmatrix}
+-1 & 0 & 0\\
+0 & 2 & 0\\
+0 & 0 & 5
+\end{pmatrix} \label{eq:tmu2026-2a}
+\end{align}
+を満たす. したがって
+\begin{align*}
+R(P\bm{x}) = \dfrac{{}^t(P\bm{x})A(P\bm{x})}{{}^t(P\bm{x})(P\bm{x})} &= \dfrac{{}^t\bm{x}({}^t\!PAP)\bm{x}}{{}^t\bm{x}({}^t\!PP)\bm{x}} \stackrel{\eqref{eq:tmu2026-2a}}{=} \boxed{\dfrac{-x_1^2 + 2x_2^2 + 5x_3^2}{x_1^2 + x_2^2 +  x_3^2}} 
+\end{align*}
+が成り立つ.
+\end{kaitou}
+(3)は(2)の誘導にのればよいが, $f_P : \R^3 \to \R^3 ; \bm{x} \mapsto P\bm{x}$として$R\circ f_P$と$R$の最大値・最小値が一致することについての議論が必要である.
+\begin{kaitou}[(3)の解]
+$P$は正則行列なので, $\{P\bm{x}\mid \bm{x}\in \R^3\setminus\{\bm{0}\}\} = \R^3\setminus\{\bm{0}\}$だから$\{R(\bm{y})\mid \bm{y} \in \R^3 \setminus \{\bm{0}\}\} = \{R(P\bm{x}) \mid \bm{x}\in \R^3 \setminus \{\bm{0}\}\}$, すなわち
+\begin{align}
+\max_{\bm{x}\in\R^3\setminus\{\bm{0}\}} R(\bm{x}) = \max_{\bm{x}\in\R^3\setminus\{\bm{0}\}} R(P\bm{x}), \label{eq:tmu2026-2b}\\
+\min_{\bm{x}\in\R^3\setminus\{\bm{0}\}} R(\bm{x}) = \min_{\bm{x}\in\R^3\setminus\{\bm{0}\}} R(P\bm{x}) \label{eq:tmu2026-2c}
+\end{align}
+である. さて, 
+\begin{align*}
+R(P\bm{x}) = \dfrac{-x_1^2 + 2x_2^2 + 5x_3^2}{x_1^2 + x_2^2 +  x_3^2} = 5 - \dfrac{6x_1^2 + 3x_2^2}{x_1^2 + x_2^2 +  x_3^2} \le 5
+\end{align*}
+かつ$\bm{e}_3 = 
+\displaystyle{
+\begin{pmatrix}
+0\\
+0\\
+1
+\end{pmatrix}
+}$のとき$R(P\bm{e}_3) = 5$なので, \eqref{eq:tmu2026-2b}より\boxed{R\text{の最大値は}5}\,であり, 
+\begin{align*}
+R(P\bm{x}) = \dfrac{-x_1^2 + 2x_2^2 + 5x_3^2}{x_1^2 + x_2^2 +  x_3^2} = -1 + \dfrac{3x_2^2 + 6x_3^2}{x_1^2 + x_2^2 +  x_3^2} \ge -1
+\end{align*}
+かつ$\bm{e}_1 = 
+\begin{pmatrix}
+1\\
+0\\
+0
+\end{pmatrix}
+$のとき$R(P\bm{e}_1) = -1$だから, \eqref{eq:tmu2026-2c}より\boxed{R\text{の最小値は}-1}\,である.
+\end{kaitou}
+誘導にのらずとも, 今回は$\|\bm{x}\|^2 = 1$の下で${}^t\bm{x}A\bm{x}$の最大値・最小値について考えればよいので, \textit{Lagrange}の未定乗数法を用いて解ける. 頻出なので確認しておこう.
+\begin{kaitou}[(3)の別解]
+任意の$\bm{x}\in\R^3\setminus\{\bm{0}\}$について$R(\bm{x}) = R\left(\frac{\bm{x}}{\|\bm{x}\|}\right)$なので, 
+\begin{align}
+\max_{\bm{x}\in\R^3\setminus\{\bm{0}\}}R(\bm{x}) = \max_{\|\bm{x}\|=1}R(\bm{x}) =
+\max_{\|\bm{x}\|^2=1}{}^t\bm{x}A\bm{x}.
+\label{eq:tmu2026-2d}
+\end{align}
+が成り立ち, 最小値についても同様である.さて, $\varphi(\bm{x}) = \|\bm{x}\|^2 - 1,\,\, \Phi(\bm{x}, \lambda) = {}^t\bm{x}A\bm{x} - \lambda\varphi(\bm{x})$\,($\lambda$は未定乗数) とおく. このとき\textit{Lagrange}の未定乗数法\footnote{$C^1$級関数が極値を取る点の必要条件についての主張だが, 今回はコンパクト集合$\|x\|^2 = 1$上で連続関数$R$について考えているので, (問題文にもある通り) 最大値・最小値の存在を認めて議論を進めてよい.}と\eqref{eq:tmu2026-2d}より, $R(\bm{x})$最大値・最小値を与える点は以下のいずれかである :
+\begin{enumerate}[label = (\alph*)]
+\item 曲面$\varphi(\bm{x}) = 0$の特異点 (i.e. $\varphi(\bm{x}) = \frac{\partial\varphi}{\partial x_1}(\bm{x}) = \frac{\partial\varphi}{\partial x_2}(\bm{x}) = \frac{\partial\varphi}{\partial x_3}(\bm{x}) = 0$を満たす点)
+\item ある定数$\lambda$が存在して $\Phi_{x_1}(\bm{x}, \lambda) = \Phi_{x_2}(\bm{x}, \lambda) = \Phi_{x_3}(\bm{x}, \lambda) = \Phi_{\lambda}(\bm{x}, \lambda) = 0$を満たす点
+\end{enumerate}
+\uline{(a)について}:\,$\varphi$の偏微分が消えるのは原点だけだが, $\varphi(\bm{0}) \ne 0$なので考えなくてよい.\\
+\uline{(b)について}:\,$\nabla = \left(\frac{\partial}{\partial x_1}, \frac{\partial}{\partial x_2}, \frac{\partial}{\partial x_3}\right)$として$\Phi_\lambda(\bm{x}, \lambda) = 0$, すなわち$\varphi(\bm{x}) = 0$の条件を一旦無視して連立方程式を整理すると
+\begin{align}
+\nabla \Phi(\bm{x}, \lambda) = \bm{0} \iff \nabla\left({}^t\bm{x}A\bm{x}\right) - \lambda\nabla\varphi(\bm{x}) = \bm{0} \label{eq:tmu2026-2e}
+\end{align}
+のように表せる. $A = (a_{ij})$とすれば
+\begin{align*}
+{}^t\bm{x}A\bm{x} = \sum_{j=1}^3\sum_{i=1}^3 a_{ij}x_ix_j
+\end{align*}
+なので, $\bm{x}$の第$k$成分での微分は
+\begin{align}
+\dfrac{\partial}{\partial x_k} \left({}^t\bm{x}A\bm{x}\right) &= \sum_{j = 1}^3 a_{kj}x_j + \sum_{i = 1}^3 a_{ik}x_i = (A\bm{x})_k + ({}^t\!A\bm{x})_k\label{eq:tmu2026-2f}
+\end{align}
+である.\footnote{\eqref{eq:tmu2026-2f}の計算では, まず$i$を固定して考える. $\bm{x}$の第$k$成分での微分が消えないのは$i = k$または$j = k$のときであり, 確かに$j \ne k$の場合は偏微分すれば$a_{kj}x_j$がでてくる. $\sum_j a_{kj}x_j$では$2a_{kk}x_k$がでてくるはずの$j = k$のときも$a_{kk}x_k$となるが, これは$\sum_i a_{ik}x_i$でもう一度足されるので, 結局上の形でかける.} ただしここで$(\cdot)_k$とはベクトルの第$k$成分のこととする. したがって$A$が対称行列であることと合わせて
+\begin{align}
+\nabla\left({}^t\bm{x}A\bm{x}\right) = (A + {}^t\!A)\bm{x} = 2A\bm{x}\label{eq:tmu2026-2g}
+\end{align}
+がわかる. $\varphi(\bm{x})$についても$\frac{\partial}{\partial x_k}\varphi(\bm{x}) = 2x_k$
+なので
+\begin{align}
+\nabla \varphi(\bm{x}) = 2\bm{x}\label{eq:tmu2026-2h}
+\end{align}
+が成り立つ. \eqref{eq:tmu2026-2g}, \eqref{eq:tmu2026-2h}より\eqref{eq:tmu2026-2e}は$A\bm{x} = \lambda\bm{x}$と同値だから, 長さ1の$A$の固有ベクトル\footnote{$\varphi(\bm{x}) = 0$を満たすために正規化する必要がある.}に対応する点の中に最大値・最小値をとるものがある. また$\mu$を$A$の固有値, $\mu$に対する長さ$1$の固有ベクトルを$\bm{u}$とすれば
+\[
+{}^t\bm{u}A\bm{u} = {}^t\bm{u}(A\bm{u}) = {}^t\bm{u}(\mu\bm{u}) = \mu{}^t\bm{u}\bm{u} = \mu
+\]
+だから, 固有値の最大値・最小値がそのまま$R$の最大値・最小値になり, \boxed{R\text{の最大値は}5, \text{最小値は}-1}\,とわかる.
+\end{kaitou}
+今回は$3$次元で考えたが, 解法からわかる通り, $n$次元の場合にもそのまま使える手法である. 
+\subsection{問題3}
+\begin{problem}
+\textbf{TMU2026年度I 問題3.}\\
+$n$を$1$以上の整数とする. $x^2+y^2\le 1$における関数
+\[
+f(x,y)=x^2y^3(1-x^2-y^2)^n
+\]
+の最大値と最小値を求めよ.
+\end{problem}
+単位円板上の最大値・最小値を求める問題であり. 関数にも$(1- x^2 -y^2)$の形があるので, 極座標変換してから計算するのがよいだろう.
+\begin{kaitou}
+極座標変換$(x, y) = (r\cos\theta, r\sin\theta) \eqcolon \Phi(r, \theta)$によって, $f$の最大値・最小値を$\tilde{f} = f \circ \Phi$の$0 \le r \le 1,\,0 \le \theta < 2\pi$(この領域を$D$とおく)における最大値・最小値として考えてよい.
+\begin{align}
+\tilde{f}(r, \theta) = r^5\cos^2\theta\sin^3\theta(1 - r^2)^n \label{eq:tmu2026-3e}
+\end{align}
+だから, 
+\begin{align}
+g(r) \coloneq r^5(1-r^2)^n,\\
+h(\theta) \coloneq \cos^2\theta\sin^3\theta
+\end{align}
+とおけば$\tilde{f} = g(r)h(\theta)$であり, かつ$g(r) \ge 0\,\,(0 \le r \le 1)$だから, 
+\begin{align}
+\max_{D}\tilde{f} &= \max_{r \in [0, 1]}g(r) \max_{\theta \in [0, 2\pi)}h(\theta),\label{eq:tmu2026-3g}\\
+\min_{D}\tilde{f} &= \max_{r \in [0, 1]}g(r) \min_{\theta \in [0, 2\pi)}h(\theta) \label{eq:tmu2026-3h}
+\end{align}
+が成り立つ. 
+\begin{align*}
+g'(r) = 5r^4(1 - r^2)^n + r^5n(1 - r^2)^{n-1}(-2r) &= r^4(1 - r^2)^{n-1}\{5(1 - r^2) - 2nr^2\}\\
+&= r^4(1-r^2)^{n-1}\{5 - (2n+5)r^2\}
+\end{align*}
+なので, 最大値をとる点の候補は$r = 0, 1, \sqrt{\frac{5}{2n + 5}} \eqcolon r_0$であり\footnote{$r = 0, 1$は境界上の点でもあるので, これで候補は尽きている.}, $g(0) = g(1) = 0$だが$g(r_0) = \dfrac{5^{\frac{5}{2}}(2n)^n}{(2n + 5)^{n+2}\sqrt{2n + 5}} > 0$なので, 
+\begin{align}
+\max_{r \in [0, 1]} g(r) = \dfrac{5^{\frac{5}{2}}(2n)^n}{(2n + 5)^{n+2}\sqrt{2n + 5}}\label{eq:tmu2026-3i}
+\end{align}
+が成り立つ. 一方, $h(\theta)$については$u = \sin\theta\,\,(-1 \le u \le 1)$と変数変換して$\tilde{h}(u) = (1 - u^2)u^3$とみれば
+\begin{align*}
+\tilde{h}'(u) = (-2u)u^3 + (1-u^2)3u^2 = u^2(3 - 5u^2)
+\end{align*}
+なので, $u = 0, \pm\sqrt{\frac{3}{5}}, \pm 1$が最大値・最小値の候補であり, $\tilde{h}(0) = \tilde{h}(\pm1) = 0$, \,$\tilde{h}\left(\pm\sqrt{\frac{3}{5}}\right) = \pm\frac{2}{5}\left(\frac{3}{5}\right)^{\frac{3}{2}}$だから
+\begin{align}
+\max_{\theta \in [0, 2\pi)}h(\theta) &= \max_{u \in [-1, 1]}\tilde{h}(u) = \frac{2}{5}\left(\frac{3}{5}\right)^{\frac{3}{2}} \label{eq:tmu2026-3j},\\
+\min_{\theta \in [0, 2\pi)}h(\theta) &= \min_{u \in [-1, 1]}\tilde{h}(u) = -\frac{2}{5}\left(\frac{3}{5}\right)^{\frac{3}{2}} \label{eq:tmu2026-3k}
+\end{align}
+が成り立つ. したがって\eqref{eq:tmu2026-3g}, \eqref{eq:tmu2026-3h}, \eqref{eq:tmu2026-3i}, \eqref{eq:tmu2026-3j}, \eqref{eq:tmu2026-3k}より
+\begin{align*}
+\max_{x^2 + y^2 \le 1}f(x, y)
+&=
+\dfrac{5^{\frac{5}{2}}(2n)^n}
+{(2n + 5)^{n+2}\sqrt{2n + 5}}
+\cdot \frac{2}{5}\left(\frac{3}{5}\right)^{\frac{3}{2}}
+= \boxed{\frac{6\sqrt{3}(2n)^n}{(2n + 5)^{n + 2}\sqrt{2n+5}}},
+\\
+\min_{x^2 + y^2 \le 1}f(x, y)
+&=
+-\dfrac{5^{\frac{5}{2}}(2n)^n}
+{(2n + 5)^{n+2}\sqrt{2n + 5}}
+\cdot \frac{2}{5}\left(\frac{3}{5}\right)^{\frac{3}{2}}
+=
+\boxed{-\frac{6\sqrt{3}(2n)^n}{(2n + 5)^{n + 2}\sqrt{2n+5}}}
+\end{align*}
+がわかる.
+\end{kaitou}
+$C^2$級関数について, 我々は極値であるための必要十分条件を知っている(停留点を求めてから\textit{Hessian}を計算する). 今回は最大値・最小値を求める問題なので\textit{Hessian}を計算する必要がないから, とりあえず$\tilde{f}$を微分する方針も考えられる. 
+\begin{kaitou}[別解]
+極座標変換$(x, y) = (r\cos\theta, r\sin\theta) \eqcolon \Phi(r, \theta)$によって, $f$の最大値・最小値を$\tilde{f} = f \circ \Phi$の$0 \le r \le 1,\,0 \le \theta \le 2\pi$における\footnote{議論を簡単にするため, 定義域に$2\pi$も含めて有界閉領域にしている.} 最大値・最小値として考えてよい. 極値を求めるために, \eqref{eq:tmu2026-3e}の停留点を計算しよう : 
+\begin{align}
+\dfrac{\partial \tilde{f}}{\partial r} &= \cos^2\theta\sin^3\theta\{5r^4(1-r^2)^n + r^5n(1-r^2)^{n-1}(-2r)\} \notag\\
+&= r^4\cos^2\theta\sin^3\theta(1 - r^2)^{n-1}\{5(1-r^2)-2nr^2\}\notag\\
+&= r^4\cos^2\theta\sin^3\theta(1-r^2)^{n-1}\{5 - (2n+5)r^2\} \label{eq:tmu2026-3a}\\
+\dfrac{\partial \tilde{f}}{\partial \theta} &= r^5(1 - r^2)^{n-1}\{2\cos\theta(-\sin\theta)\sin^3\theta + \cos^2\theta\cdot3\sin^2\theta\cos\theta\}\notag\\
+&= r^5(1-r^2)^n\cos\theta\sin^2\theta(-2\sin^2\theta + 3\cos^2\theta)\notag\\
+&= r^5(1-r^2)^n\sin^2\theta\cos\theta(3 - 5\sin^2\theta) \label{eq:tmu2026-3b}
+\end{align}
+\begin{align}
+\dfrac{\partial \tilde{f}}{\partial r} = 0 &\iff \eqref{eq:tmu2026-3a} = 0 \iff r = 0, 1, \sqrt{\frac{5}{2n+5}}\quad\text{or}\quad\cos\theta = 0\quad\text{or}\quad\sin\theta = 0\label{eq:tmu2026-3c}\\
+\dfrac{\partial \tilde{f}}{\partial \theta} = 0 &\iff \eqref{eq:tmu2026-3b} = 0 \iff r = 0, 1 \quad\text{or}\quad\cos\theta = 0\quad\text{or}\quad\sin\theta = 0 ,\pm\sqrt{\dfrac{3}{5}}  \label{eq:tmu2026-3d}
+\end{align}
+だが, $r = 0, 1,\, \cos\theta = 0,\,\sin\theta = 0$のときはいずれも$\tilde{f}(r, \theta) = 0$である. 極値をとる点の候補として, あとは$(r, \theta) = \left(r_0, \theta_0\right)\,\,\left(r_0 \coloneq \sqrt{\frac{5}{2n + 5}},\,\sin\theta_0 = \pm\sqrt{\frac{3}{5}}\right)$のときを調べればよく, $\cos^2\theta_0 = \frac{2}{5}$だから
+\begin{align}
+\tilde{f}(r_0, \theta_0) =
+\begin{cases}
+\dfrac{6\sqrt{3}(2n)^n}{(2n + 5)^{n + 2}\sqrt{2n+5}} & \text{if}\,\,\sin\theta_0 = \sqrt{\frac{3}{5}}\\
+-\dfrac{6\sqrt{3}(2n)^n}{(2n + 5)^{n + 2}\sqrt{2n+5}} & \text{if}\,\,\sin\theta_0 = -\sqrt{\frac{3}{5}}
+\end{cases}
+\label{eq:tmu2026-3f}
+\end{align}
+が成り立つ. ここで$\tilde{f}$は連続かつ定義域がコンパクト集合なので必ず最大値・最小値が存在し, ($\tilde{f}$が$C^1$級であることから)それらは以下のいずれかで達成される : 
+\begin{enumerate}[label=(\alph*)]
+\item 定義域の境界上の点(i.e. $r = 1$)
+\item \eqref{eq:tmu2026-3c}かつ\eqref{eq:tmu2026-3d}を満たす点\footnote{極値を取る点が含まれる.}
+\end{enumerate}
+(a)のとき$\tilde{f}(1, \theta) = 0$であり\footnote{これは極値候補を調べるときにも見た.}, (b)についても$r = \sqrt{\frac{5}{2n + 5}},\,\sin\theta_0 = \pm\sqrt{\frac{3}{5}}$のとき以外は$\tilde{f}$の零点であった. 一方で$r = \sqrt{\frac{5}{2n + 5}},\,\sin\theta_0 = \pm\sqrt{\frac{3}{5}}$のときは, \eqref{eq:tmu2026-3e}の形から$\sin\theta > 0$なら$\tilde{f}(r, \theta) > 0$, $\sin\theta < 0$なら$\tilde{f}(r, \theta) < 0$だったので, これらが最大値・最小値に他ならない. したがって\eqref{eq:tmu2026-3f}より\boxed{\text{最大値}\,\frac{6\sqrt{3}(2n)^n}{(2n + 5)^{n + 2}\sqrt{2n+5}},\,\text{最小値}\,-\frac{6\sqrt{3}(2n)^n}{(2n + 5)^{n + 2}\sqrt{2n+5}}}\,とわかる.
+\end{kaitou}
+
+\begin{marker}
+今回は合成後の式\eqref{eq:tmu2026-3e}がきれいな形をしているので不要だが, 煩雑になる場合や$f_x, f_y$をすでに計算していた場合は, 以下のようにchain ruleを使って\eqref{eq:tmu2026-3e}の微分を求めることになる : 
+\end{marker}
+\begin{align}
+\dfrac{\partial f}{\partial x} &= 2xy^3(1-x^2 - y^2)^{n-1}\{(1- x^2 - y^2) - nx^2\},\label{eq:tmu2026-3l}\\
+\dfrac{\partial f}{\partial y} &= x^2y^2(1 - x^2 - y^2)^{n-1}\{3(1 - x^2 - y^2) - 2ny^2\},\label{eq:tmu2026-3m}\\
+\dfrac{\partial x}{\partial r} &= \cos\theta, \quad \dfrac{\partial y}{\partial r} = \sin\theta,\quad \dfrac{\partial x}{\partial \theta} = -r\sin\theta, \quad \dfrac{\partial y}{\partial \theta} = r\cos\theta \notag
+\end{align}
+だから,
+\begin{align*}
+\dfrac{\partial \tilde{f}}{\partial r} &= \dfrac{\partial \tilde{f}}{\partial x}\dfrac{\partial x}{\partial r} + \dfrac{\partial \tilde{f}}{\partial y}\dfrac{\partial y}{\partial r}\notag\\
+&= 2r^4\cos^2\theta\sin^3\theta(1-r^2)^{n-1}\{(1-r^2) - nr^2\cos^2\theta\} + r^4\cos^2\theta\sin^3\theta(1-r^2)^{n-1}\{3(1-r^2) - 2nr^2\sin^2\theta\}\notag\\
+&= r^4\cos^2\theta\sin^3\theta(1-r^2)^{n-1}\{3(1 - r^2) - nr^2(\cos^2\theta + \sin^2\theta) - nr^2\sin^2\theta\}\notag\\
+&= r^4\cos^2\theta\sin^3\theta(1-r^2)^{n-1}\{5(1 - r^2) - 2nr^2\} \notag\\
+&= r^4\cos^2\theta\sin^3\theta(1-r^2)^{n-1}\{5 - (2n+5)r^2\},\\ 
+\dfrac{\partial \tilde{f}}{\partial \theta} &= \dfrac{\partial \tilde{f}}{\partial x}\dfrac{\partial x}{\partial \theta} + \dfrac{\partial \tilde{f}}{\partial y}\dfrac{\partial y}{\partial \theta}\notag\\
+& = -2r^5\cos\theta\sin^4\theta(1 - r^2)^{n-1}\{(1 - r^2) - nr^2\cos^2\theta\} + r^5\sin^2\theta\cos^3\theta(1 - r^2)^{n-1}\{3(1 - r^2) - 2nr^2\sin^2\theta\}\notag\\
+&= r^5\cos\theta\sin^2\theta(1 - r^2)^n(3\cos^2\theta-2\sin^2\theta) \notag\\
+&= r^5\cos\theta\sin^2\theta(1 - r^2)^{n}(3 - 5\sin^2\theta)
+\end{align*}
+これで\eqref{eq:tmu2026-3a}, \eqref{eq:tmu2026-3b}の計算が正しいことが確認できた. 
+\begin{marker}
+極値を求める方針では, 当然$f(x, y)$を直接微分してもよい. その場合, \eqref{eq:tmu2026-3l}, \eqref{eq:tmu2026-3m}でも上と同様の議論から$(1 - x^2 -y^2) - nx^2 = 0$かつ$3(1 - x^2 - y^2) - 2ny^2 = 0$の場合に最大値・最小値をとるので, $1 - x^2 -y^2 = nx^2$を$3(1 - x^2 - y^2) - 2ny^2 = 0$に代入することで
+\[
+\begin{cases}
+(1 - x^2 -y^2) - nx^2 = 0\\
+3(1 - x^2 - y^2) - 2ny^2 = 0
+\end{cases}
+\iff
+\begin{cases}
+y^2 = \dfrac{3}{2}x^2\\
+1 -x^2 -y^2 = nx^2
+\end{cases}
+\iff
+\begin{cases}
+x^2 = \dfrac{2}{2n + 5}\\
+y^2 = \dfrac{3}{2n+5}
+\end{cases}
+\]
+となり, 最大値・最小値が求まる.
+\end{marker}
+
+
+\subsection{問題4}
+\begin{problem}
+\textbf{TMU2026年度I 問題4.}\\
+$\mathbb{R}^2$の部分集合$(0,\infty)\times(0,\infty)$で連続関数$f(x,\alpha)$が定義され, 任意の$\alpha\in(0,\infty)$に対して関数$h_\alpha(x)\coloneq f(x,\alpha)$
+は$[0,\infty)$で可積分であるとする. 広義積分
+$\displaystyle{
+F(\alpha)\coloneqq \int_0^\infty f(x,\alpha)\,dx
+}$
+が, \textbf{$\alpha$に関して区間$(0,\infty)$で広義一様収束する}とは, 任意の有界閉区間$I\subset(0,\infty)$に対して, 収束$\displaystyle{
+\int_0^R f(x,\alpha)\,dx\to F(\alpha)
+\qquad (R\to\infty)}
+$
+が$I$で一様であることをいう. 以下の問いに答えよ.
+
+\begin{enumerate}[label=(\arabic*)]
+    \item 広義積分
+    $\displaystyle{\int_0^\infty e^{-\alpha x^2}\,dx}$
+    は$\alpha$に関して区間$(0,\infty)$で広義一様収束することを示し,
+    \[
+    \int_0^\infty e^{-\alpha x^2}\,dx
+    =
+    \frac{1}{2}\sqrt{\frac{\pi}{\alpha}}
+    \]
+    が成り立つことを示せ. ただし, $\displaystyle{\int_0^\infty e^{-x^2}\,dx=\frac{\sqrt{\pi}}{2}}$
+    であることは証明なしで用いてよい.
+
+    \item 自然数$N$を固定し, $\displaystyle{g_N(\alpha)\coloneq \int_0^N f(x,\alpha)\,dx}$
+    と定める. また, $0<\varepsilon<t<\infty$とする. このとき, 関数$g_N(\alpha)$は区間$[\varepsilon,t]$で連続であることを示せ.
+
+    \item 広義積分$\displaystyle{F(\alpha)\coloneqq \int_0^\infty f(x,\alpha)\,dx}$
+    が, $\alpha$に関して区間$(0,\infty)$で広義一様収束するならば, 任意の$\varepsilon,t$, $0<\varepsilon<t<\infty$に対して$F(\alpha)$は区間$[\varepsilon,t]$で連続であり,
+    \[
+    \int_0^\infty
+    \left(
+    \int_\varepsilon^t f(x,\alpha)\,d\alpha
+    \right)
+    dx
+    =
+    \int_\varepsilon^t F(\alpha)\,d\alpha
+    \]
+    が成り立つことを示せ.
+
+   \item 次の等式が成り立つことを示せ.
+    \[
+    \int_0^\infty \frac{1-e^{-tx^2}}{x^2}\,dx
+    =
+    \sqrt{\pi t}
+    \qquad (t>0).
+    \]
+\end{enumerate}
+\end{problem}
+\begin{marker}
+問題の順序は前後するが, Gauss積分を使ってよいので, 最初に$F(\alpha)$の存在を認めてしまえば, 積分区間を分割することで簡単に示せる (これは極限関数$F(\alpha)$の存在によって保証される計算である). この場合, 先にexplicitな形を計算することになり, 解答は次の様.
+\end{marker}
+\begin{kaitou}
+Gauss積分と変数変換によって
+\begin{align*}
+\int_0^\infty e^{-\alpha x^2}\,dx &=\int_0^\infty e^{-z^2}\cdot\frac{1}{\sqrt{\alpha}}\,dz\qquad\left(x = \frac{z}{\sqrt{\alpha}}\text{と置換}\right)\\
+&=\boxed{\frac{1}{2}\sqrt{\frac{\pi}{\alpha}}}
+\end{align*}
+がわかる. このときの収束は, 任意の有界閉区間$I \coloneq [a,b] \subset (0, \infty)$において一様である. 実際
+\begin{align*}
+\sup_{\alpha \in I} \left|\int_0^R e^{-\alpha x^2}\,dx - \int_0^\infty e^{-\alpha x^2}\,dx\right| = \sup_{\alpha \in I} \int_R^\infty e^{-\alpha x^2}\,dx &\le \int_R^\infty e^{-ax^2}\,dx\\ 
+&= \int_0^\infty e^{-ax^2}\,dx - \int_0^R e^{-ax^2}\,dx\\
+& \to 0\qquad(R \to \infty)
+\end{align*}
+からわかる.
+\end{kaitou}
+出題者の意図する解答はこちらだったかもしれないが, やはり問題を解く順序が (論理的に) 前後するのは好ましくない. この問題は同値なCauchy条件に言い換えることで回避できる. 
+\begin{kaitou}[別解]
+任意の有界閉集合$I \coloneq [a, b] \subset (0, \infty)$について$\int_0^\infty e^{-\alpha x^2}\, dx$が一様収束すること, すなわち
+\begin{align}
+\sup_{\alpha \in I}\left|\int_{u}^{v}e^{-\alpha x^2}\,dx\right| \to 0 \qquad(u, v \to 0) \label{eq:tmu2026-4d}
+\end{align}
+を示せばよい. $0 < u < v$として, $x \ge u$で$\frac{x}{u} \ge 1$であることを加味すれば
+\begin{align*}
+\sup_{\alpha \in I} \int_u^v e^{-\alpha x^2}\,dx \le \int_u^\infty e^{-ax^2}\, dx \le \frac{1}{u}\int_
+u^\infty xe^{-a x^2}\, dx = \frac{1}{u}\left[-\frac{1}{2a}e^{-ax^2}\right]_u^\infty &= \frac{e^{-a u^2}}{2au}\\
+ &\to 0 \qquad(u \to \infty)
+\end{align*}
+なので, 結論が従う.
+\end{kaitou}
+\begin{marker}
+$u, v$の極限を考えるのは難しいので, $v$を消去して評価する. また今回は$e^{-a x^2}$の積分を評価するために, 原始関数のわかる$xe^{-a x^2}$の形を上手くつくる.
+\end{marker}
+\begin{marker}
+Gauss積分
+\[
+\int_0^\infty e^{-x^2}\, dx = \frac{\sqrt{\pi}}{2} 
+\]
+を認めてよいことになっているので,
+\[
+\int_u^\infty e^{-a x^2}\, dx \to 0 \qquad(u \to \infty)
+\]
+と評価するほうが現実的かもしれないが, この情報を使うなら最初の解答のほうがシンプルである.
+\end{marker}
+\textbf{(1)の一様収束の議論について}
+\begin{dfn}{広義積分の一様収束}{tmu2026-4a}
+広義積分$F(\alpha) \coloneq \int_0^\infty f(x, \alpha)\, dx$が$\alpha$に関して区間$[a, b]$で$F(\alpha)$に一様収束するとは, 
+\[
+\sup_{\alpha \in I}\left|\int_0^R f(x, \alpha)\,dx - F(\alpha)\right| \to 0\qquad (R \to \infty)
+\]
+が成り立つことをいう.
+\end{dfn}
+つまりここで示すべきは, 任意の有界閉区間$I\coloneq [a,b]\subset (0, \infty)$について
+\begin{align}
+\lim_{R \to \infty} \sup_{\alpha \in I} \left|\int_0^R e^{-\alpha x^2}\,dx - F(\alpha)\right| = 0 \label{eq:tmu2026-4e}
+\end{align}
+が成り立つことである. しかしここではまだ$F(\alpha)$が各$\alpha \in I$について収束するか分かっていないので, 一様Cauchy列 (の拡張) を考えて, $I$上の連続関数からなるベクトル空間$C(I)$が完備 (i.e.$\:\left(C(I), \|\cdot\|_\infty\right)$はBanach空間) であることから, 上の等式を示す.
+
+まず
+\[
+G_R(\alpha) \coloneq \int_0^R e^{-\alpha x^2}\, dx
+\]
+とおけば, \eqref{eq:tmu2026-4e}は
+\begin{align*}
+\lim_{R \to \infty} \sup_{\alpha \in I}|G_R(\alpha) - F(\alpha)| = 0
+\end{align*}
+とかける. ここで\eqref{eq:tmu2026-4d}, すなわち任意の$\varepsilon > 0$に対し, ある$R_0 > 0$が存在して
+\begin{align}
+\forall u, v > R_0. \sup_{\alpha \in I} |G_u(\alpha) - G_v(\alpha)| < \frac{\varepsilon}{2} \label{eq:tmu2026-4f}
+\end{align}
+が示せたとする. 特に$u,v \in N$と思えば, これは関数列$\{G_n\}_{n\in \N}$が一様Cauchy列であることに他ならない. さて, $C(I)$は完備だったので, ある関数$G(\alpha) \in C(I)$が存在して, 次の条件を満たす : \eqref{eq:tmu2026-4f}で定めた$\varepsilon > 0$に対し, ある$N\in\N$が存在して
+\[
+\forall n \ge N.\,\sup_{\alpha \in I} |G_n(\alpha) - G(\alpha)| < \frac{\varepsilon}{2}
+\]
+が成り立つ. このとき
+\[
+\lim_{R \to \infty}\sup_{\alpha \in I} |G_R(\alpha) - G(\alpha)| = 0
+\]
+である. 実際, $R > R_0$のとき$N_0 \coloneq \max\{N, [R_0]+1\}+1$とすれば
+\begin{align*}
+\sup_{\alpha \in I} |G_R(\alpha) - G(\alpha)| \le \sup_{\alpha \in I} |G_R(\alpha)-G_{N_0}(\alpha)| + \sup_{\alpha \in I} |G_{N_0}(\alpha) - G(\alpha)| < \varepsilon
+\end{align*}
+から従う. よって極限の一意性から$F(\alpha) = G(\alpha)$なので, 結局\eqref{eq:tmu2026-4d}を示せばよいことがわかる.
+
+上では関数族$\{G_R\}_{R \in \R_{>0}}$の一様収束を考えた. $R \to \infty$以外の場合も考えてみよう.
+\begin{dfn}{連続変数に関する一様収束}{tmu2026-4b}
+2つの変数$\alpha, r$を含む関数$g(\alpha, r),\:\alpha \in I$を考える.
+\begin{align*}
+&r \to r_0\text{において}g(\alpha, r)\text{が}g(\alpha)\text{に収束する}\\
+:\Longleftrightarrow & \forall \varepsilon >0.\,\forall \alpha \in I.\, \exists \delta>0.\, \left(0 < |r - r_0| < \delta \Rightarrow |g(\alpha,r) - g(\alpha) | < \varepsilon \right)
+\end{align*}
+特に$\delta > 0$が$\alpha$によらず定められるとき, 一様収束であるという. すなわち,
+\begin{align*}
+&r \to r_0\text{において}g(\alpha, r)\text{が}g(\alpha)\text{に一様収束する}\\
+:\Longleftrightarrow & \forall \varepsilon >0.\,\exists \delta>0.\forall \alpha \in I.\, \, \left(0 < |r - r_0| < \delta \Rightarrow |g(\alpha,r) - g(\alpha) | < \varepsilon \right)
+\end{align*}
+\end{dfn}
+連続変数に関する関数族の収束性は, 点列を介すことで慣れた議論に帰着される.
+\begin{thm}{点列による極限の特徴づけ}{tmu2026-4c}
+以下の条件は同値:
+\begin{enumerate}
+\item[(i)]$r \to r_0$において$g(\alpha, r)$が$g(\alpha)$に収束する
+\item[(ii)]$r_0$に収束する任意の点列$\{r_n\}, r_n \ne r_0$に対し$g(\alpha, r_n) \to g(\alpha)\qquad(n \to \infty)$
+\end{enumerate}
+(ii)の$r_n \to r_0$における基準$N$が$\alpha$に依らず定められるとき, (i)の収束を一様収束と読み替えられる.
+\end{thm}
+\begin{proof}
+$\alpha \in I$を固定して各点収束について考える.\\
+\uline{(i)$\Rightarrow$(ii)}は容易. 実際, $n \to \infty$のとき$r_n \to r_0$なので, $g(\alpha, r_n) \to g(\alpha)$から従う.\\
+\uline{(ii)$\Rightarrow$(i)}は対偶を示す.
+\[
+\lim_{r \to r_0} g(\alpha, r) \ne g(\alpha)
+\]
+を仮定する. このとき, ある$\varepsilon > 0$が存在して
+\[
+\forall \delta>0.\,\exists r.\,\left(0 < |r -r_0| < \delta\:\text{かつ}\: |g(\alpha, r) - g(\alpha)| \ge \varepsilon \right)
+\]
+が成り立つ. そこで各$n \in \N$に対し$\delta = 1/n$として
+\[
+0 < |r_n - r_0| < \frac{1}{n}
+\]
+なる$r_n$をとれば$r_n \to r_0$だが,
+\[
+|g(\alpha, r_n) - g(\alpha)| \ge \varepsilon
+\]
+より$g(\alpha, r_n) \nrightarrow g(\alpha)$である.
+
+次に一様収束の場合について考える. これは各点収束の場合とほとんど同じである.\\
+\uline{(i)$\Rightarrow$(ii)} : (i)の一様収束ver.は
+\[
+\lim_{r \to r_0} \sup_{\alpha \in I} |g(\alpha, r) - g(\alpha)| = 0
+\]
+であった. このとき$r_0$に収束する任意の点列$\{r_n\}\,(r_n \ne r_0)$について
+\[
+\lim_{n \to \infty} \sup_{\alpha \in I}|g(\alpha, r_n) - g(\alpha)| = 0
+\]
+が成り立ち, これは
+\[
+\forall \varepsilon>0.\,\exists N\in \N.\,\forall \alpha \in I.\,\forall n \ge N.\,|g(\alpha, r_n)-g(\alpha)| < \varepsilon
+\]
+が成り立つことに他ならない.\\
+\uline{(ii)$\Rightarrow$(i)} : 対偶を示す. ある$\varepsilon > 0$が存在して
+\[
+\forall \delta>0.\,\exists \alpha \in I.\,\exists r.\,\left(0 < |r -r_0| < \delta\:\text{かつ}\: |g(\alpha, r) - g(\alpha)| \ge \varepsilon \right)
+\]
+が成り立つと仮定する. 各$n \in \N$に対し$\delta = 1/n$とすれば, $(\alpha_n, r_n)$の組が存在して
+\[
+|r - r_0| < \frac{1}{n}\:\text{かつ}\:|g(\alpha_n, r_n) - g(\alpha_n)| \ge \varepsilon
+\]
+が成り立つ. このとき$r_n \to r_0$だが
+\[
+\sup_{\alpha \in I}|g(\alpha, r_n) - g(\alpha)| \ge |g(\alpha_n, r_n) - g(\alpha_n)| \ge \varepsilon
+\]
+なので, $\sup_{\alpha \in I} |g(\alpha, r_n) - g(\alpha)| \nrightarrow 0$がわかる.
+\end{proof}
+$r \to \infty$の場合についても整理しておく.
+\begin{dfn}{連続変数に関する一様収束'}{tmu2026-4d}
+2つの変数$\alpha, r$を含む関数$g(\alpha, r),\:\alpha \in I$を考える.
+\begin{align*}
+&r \to \infty\text{において}g(\alpha, r)\text{が}g(\alpha)\text{に収束する}\\
+:\Longleftrightarrow & \forall \varepsilon >0.\,\forall \alpha \in I.\, \exists R\in\R.\, \left(r > R \Rightarrow |g(\alpha,r) - g(\alpha) | < \varepsilon \right)
+\end{align*}
+特に$R$が$\alpha$によらず定められるとき, 一様収束であるという. すなわち,
+\begin{align*}
+&r \to \infty\text{において}g(\alpha, r)\text{が}g(\alpha)\text{に一様収束する}\\
+:\Longleftrightarrow & \forall \varepsilon >0.\,\exists R\in \R.\forall \alpha \in I.\, \, \left(r > R \Rightarrow |g(\alpha,r) - g(\alpha) | < \varepsilon \right)
+\end{align*}
+\end{dfn}
+\begin{thm}{点列による極限の特徴づけ'}{tmu2026-4e}
+以下の条件は同値:
+\begin{enumerate}
+\item[(i)]$r \to \infty$において$g(\alpha, r)$が$g(\alpha)$に収束する
+\item[(ii)]$r_n \to \infty$となる任意の点列$\{r_n\}$に対し$g(\alpha, r_n) \to g(\alpha)\qquad(n \to \infty)$
+\end{enumerate}
+(ii)の$r_n \to \infty$における基準$N$が$\alpha$に依らず定められるとき, (i)の収束を一様収束と読み替えられる.
+\end{thm}
+\begin{proof}
+$r \to r_0$の場合と同じなので, \uline{一様収束における(ii)$\Rightarrow$(i)}の対偶のみ示す. ある$\varepsilon >0$が存在して
+\[
+\forall R\in\R.\, \exists\alpha \in I.\, \exists r \ge R.\, |g(\alpha, r) - g(\alpha)| \ge \varepsilon
+\]
+が成り立つと仮定する. このとき各$n \in \N$に対し$R = n$とすれば, $(\alpha_n, r_n)$の組が存在して
+\[
+r_n \ge n\:\text{かつ}\:|g(\alpha_n, r_n)- g(\alpha_n)| \ge \varepsilon
+\]
+が成り立つ. このとき$r_n \to \infty$だが
+\[
+\sup_{\alpha \in I} |g(\alpha, r_n) - g(\alpha)| \ge |g(\alpha_n, r_n) - g(\alpha_n)| \ge \varepsilon
+\]
+なので, $\sup_{\alpha \in I} |g(\alpha, r_n)- g(\alpha)| \nrightarrow 0$である.
+\end{proof}
+準備が整ったので, 問題をいま一度振り返ろう. $\alpha, R$の2変数関数$g(\alpha, R)$を
+\[
+G_R(\alpha) \coloneq \int_0^R e^{-\alpha x^2}\, dx
+\]
+として, 任意の有界閉区間$I \subset (0, \infty)$上で$G_R$がある関数$F$に一様収束すること, つまり
+\[
+\sup_{\alpha \in I} |G_R(\alpha) - F(\alpha)| \to 0 \qquad (R \to \infty)
+\]
+を示せばよかった. これは点列による極限の特徴づけ'より, 任意の$\{R_n\} \subset \R_{>0}$について
+\[
+\sup_{\alpha \in I} |G_{R_n}(\alpha) - F(\alpha)| \to 0\qquad (n\to \infty)
+\]
+が成り立つことと同値である. さて, $F$の存在を使いたくないわけだが, 関数列$\{G_{R_n}\}_{n \in \N}$が$F$に$I$上一様収束することは$\{G_{R_n}\}$が一様Cauchy列であることと同値だったので,
+\[
+\sup_{\alpha \in I} |G_{R_m}(\alpha) - G_{R_n}(\alpha)| \to 0\qquad (m, n \to \infty)
+\]
+を示せばよいことになる. これは関数族$\{G_R\}_{R>0}$について, $u, v \in \R_{>0}$として
+\begin{align}
+\sup_{\alpha \in I} |G_u(\alpha) - G_v(\alpha)| \to 0\qquad (u, v \to \infty) \label{eq:tmu2026-4g}
+\end{align}
+が成り立てば, 条件を満たす任意の数列$\{G_{R_n}\}_n$について必ず成り立つ. 関数族が\eqref{eq:tmu2026-4g}を満たすとき, \textbf{関数族は$I$上一様Cauchy条件を満たす}と呼ぶことにする. 
+
+ここまでの議論から, 関数族$\{G_R\}_R$が$I$上一様Cauchy条件を満たすならば一様収束することがわかった. 逆は
+\[
+\sup_{\alpha \in I} |G_R(\alpha) - G(\alpha)| \to 0\qquad(R \to \infty)
+\]
+なら$u, v \in \R$に対して
+\[
+\sup_{\alpha \in I} |G_u(\alpha) - G_v(\alpha)| \le \sup_{\alpha \in I} |G_u(\alpha)  - F(\alpha)| +\sup_{\alpha \in I} |F(\alpha) - G_v(\alpha)| \to 0\qquad(u,v \to \infty)
+\]
+より明らか. つまり次のことがいえた:
+\begin{thm}{連続変数に関する一様収束の同値条件}{tmu2026-4f}
+$I$を有界閉区間とし, $(C(I), \|\cdot\|_I)$を考える.
+$\{G_R\}\subset C(I)$ $(R>0)$ とする. このとき次は同値:
+\begin{enumerate}
+\item[(i)] $\{G_R\}_{R>0}$は$I$上一様収束する
+\item[(ii)] $\{G_R\}_{R>0}$は一様Cauchy条件を満たす
+\end{enumerate}
+\end{thm}
+別解では初めからこの事実を使った.
+\begin{problem}
+\textbf{(再掲) TMU2026年度 問題4-(2).}\\
+$f(x, \alpha)$は$[0, \infty) \times (0, \infty) \subset\R^2$上の連続関数とする. 自然数$N$を固定し, $\displaystyle{g_N(\alpha) = \int_0^N f(x, \alpha)\,dx}$と定める. また, $0 < \varepsilon < t < \infty$とする. このとき, 関数$g_N(\alpha)$は区間$[\varepsilon, t]$で連続であることを示せ.
+\end{problem}
+\begin{kaitou}
+$g_N(\alpha)$が$[\varepsilon, t] \eqqcolon I$で連続, すなわち
+\begin{align}
+\forall \beta \in I.\, \forall \eta > 0.\, \exists \delta > 0.\,\forall \alpha \in I.\,\left(|\alpha - \beta| < \delta \to |g_N(\alpha) - g_N(\beta)| < \eta \right) \label{eq:tmu2026-4a}
+\end{align}
+を示す. $\beta \in I, \eta > 0$を任意にとる. $f(x, \alpha)$は$[0, \infty) \times (0, \infty)$上連続なので, 特に$[0, N] \times [\varepsilon, t]$上連続だから, Heineの定理\ref{thm:tmu2026-4g}より$[0, N] \times [\varepsilon, t]$上一様連続である. つまり
+\begin{align}
+\exists \delta > 0.\,\forall x \in [0, N].\,\forall \alpha \in I.\,\left(|\alpha - \beta| < \delta \to |f(x, \alpha) - f(x, \beta)| < \dfrac{\eta}{2N}\right) \label{eq:tmu2026-4b}
+\end{align}
+が成り立つ. ここで\eqref{eq:tmu2026-4b}を満たすような$\delta > 0$をとれば, $|\alpha - \beta| < \delta$を満たす任意の$\alpha$に対して
+\begin{align*}
+|g_N (\alpha) - g_N(\beta)| = \left|\int_0^N f(x, \alpha)\,dx - \int_0^N f(x, \beta)\, dx\right|   &= \left|\int_0^N \{f(x, \alpha) - f(x, \beta)\} \, dx \right|\\
+ &\le \int_0^N \left|f(x, \alpha) - f(x, \beta)\right|\\
+ &\le \int_0^N \dfrac{\eta}{2N}\,dx \\
+ & < \eta
+\end{align*}
+となるから, \eqref{eq:tmu2026-4a}が従う.
+\end{kaitou}
+\begin{thm}{Heineの定理}{tmu2026-4g}
+$X$をコンパクト距離空間, $Y$を距離空間とする. このとき$f \in C(X, Y)$は$X$上一様連続である.
+\end{thm}
+今回は特に次の形でHeineの定理を使った : 
+\begin{thm}{微積分学におけるHeineの定理}{tmu2026-4h}
+有界閉集合$K \subset \R^n$上の実数値連続関数は$K$上一様連続である.
+\end{thm}
+\begin{ex}{例: 連続だが一様連続でない関数}
+実数値関数$f : (0, 1] \to \R$を
+\[
+f(x) = \dfrac{1}{x}
+\]
+と定めれば$f$は$(0, 1]$上連続だが一様連続ではない. 
+\end{ex}
+\begin{proof}
+後者を背理法で示す. $f$が一様連続であるとすれば (``的''を$\varepsilon = 1$とすることで), ある$\delta > 0$が存在して
+\begin{align}
+\forall x, y \in (0, 1].\,(|x - y| < \delta \to |f(x) - f(y)| < 1) \label{eq:tmu2026-4c}
+\end{align}
+が成り立つ. そのような$\delta > 0$をとれば
+\[
+\lim_{n \to \infty} \dfrac{1}{n(n + 1)} = 0
+\]
+なので, ある$N \in \N$が存在して
+\[
+\dfrac{1}{N(N+1)} < \delta
+\]
+となるが, このとき$\frac{1}{N}, \frac{1}{N + 1} \in (0, 1]$かつ
+\[
+\left|\dfrac{1}{N} - \dfrac{1}{N + 1}\right| = \dfrac{1}{N(N + 1)} < \delta
+\]
+だが
+\[
+\left|f\left(\frac{1}{N}\right) - f\left(\frac{1}{N + 1}\right)\right| = |N - (N+1)| = 1 
+\]
+となり\eqref{eq:tmu2026-4c}に矛盾する.
+\end{proof}
+\begin{problem}
+\textbf{(再掲) TMU2026年度 問題4-(3).}\\
+広義積分$\displaystyle{F(\alpha) \coloneq \int_0^\infty f(x, \alpha)\,dx}$が, $\alpha$に関して区間$(0, \infty)$で広義一様収束するならば, 任意の$\varepsilon, t\,\,(0 < \varepsilon < t < \infty)$に対して$F(\alpha)$は区間$[\varepsilon, t]$で連続であり. 
+\[
+\int_0^\infty \left(\int_\varepsilon^t f(x, \alpha)\,d\alpha\right)\,dx
+\]
+が成り立つことを示せ.
+\end{problem}
+\begin{kaitou}
+(2)より, $N \in \N$に対し$\displaystyle{g_N(\alpha) = \int_0^N f(x, \alpha)\,dx}$と定めれば, $\{g_N\}_{N = 1}^\infty$は各項が$[\varepsilon, t] \subset (0, \infty)$上連続な関数列である. 仮定より
+\[
+g_N \rightrightarrows F \quad \text{on}\,\,[\varepsilon, t]
+\]
+であり, 連続関数の一様収束極限もまた連続関数\ref{thm:tmu2026-4i}だから, \uline{$F(\alpha)$は$[\varepsilon, t]$上連続}である. したがって$F(\alpha)$は$[\varepsilon, t]$上Riemann積分可能である. このとき
+\begin{align*}
+\int_\varepsilon^t F(\alpha)\,d\alpha = \int_\varepsilon^t \left(\lim_{N \to \infty} g_N(\alpha)\right)\,d\alpha &= \lim_{N \to \infty} \int_\varepsilon^t g_N(\alpha)\,d\alpha\qquad(\text{積分と極限の順序交換\ref{thm:tmu2026-4j}})\\
+&= \lim_{N \to \infty} \int_\varepsilon^t \left(\int_0^N f(x, \alpha)\,dx\right)\,d\alpha\\
+&= \lim_{N \to \infty} \int_0^N \left(\int_\varepsilon^t f(x, \alpha)\,d\alpha\right)\,dx\qquad(\text{Fubiniの定理\ref{thm:tmu2026-4k}})\\
+&= \int_0^\infty \left(\int_\varepsilon^t f(x, \alpha)\,d\alpha\right)\,dx
+\end{align*}
+なので
+\[
+\int_0^\infty\left(\int_\varepsilon^t f(x, \alpha)\,d\alpha\right)\,dx = \int_\varepsilon^t F(\alpha)\,d\alpha
+\]
+が従う.
+\end{kaitou}
+(3)で使った重要な事実をまとめておこう.
+\begin{thm}{連続関数の一様収束極限も連続}{tmu2026-4i}
+$I \subset \R$を有界閉区間, $\{f_n\}_{n=1}^\infty$を$I$上定義された連続関数の列とする. このとき$\{f_n\}$が$I$上$f$に一様収束するならば, $f$も$I$上の連続関数である.
+\end{thm}
+\begin{proof}
+$a \in I$を固定し, $\varepsilon > 0$を任意にとる. まず$f_n$が$f$に一様収束するから
+\begin{align}
+\exists N \in \N.\,\forall x \in I.\,\forall n \in \N.\,\left(n \ge N \to |f_n(x) - f(x)| <  \dfrac{\varepsilon}{3}\right) \label{eq:tmu2026-4j}
+\end{align}
+が成り立つ. また各$n \in \N$について$f_n$は連続だったから, とくに\eqref{eq:tmu2026-4j}のような$N \in \N$に対して
+\begin{align}
+\exists \delta> 0.\, \forall x \in I.\,\left(|x - a| < \delta \to |f_N(x) - f_N(a)| < \dfrac{\varepsilon}{3}\right) \label{eq:tmu2026-4i}
+\end{align}
+が成り立つ. したがって, \eqref{eq:tmu2026-4i}のような$\delta$について, $|x - a| < \delta$のとき
+\begin{align*}
+|f(x) - f(a)| &\le |f(x) - f_N(x)| + |f_N(x) - f_N(a)| + |f_N(a) - f(a)| < \dfrac{\varepsilon}{3} + \dfrac{\varepsilon}{3} + \dfrac{\varepsilon}{3} = \varepsilon
+\end{align*}
+が成り立つ. 
+\end{proof}
+\begin{thm}{積分と極限の順序交換}{tmu2026-4j}
+有界閉区間$[a, b]$上の連続関数列$\{f_n\}_{n=1}^\infty$が$f$に$[a, b]$上一様収束するならば, 次の順序交換が許される : 
+\[
+\int_a^x\left(\lim_{n \to \infty} f_n(t)\right)\,dt = \lim_{n \to \infty} \int_a^x f_n(t)\,dt
+\]
+\end{thm}
+\begin{proof}
+$\displaystyle{F_n(x) = \int_a^x f_n(t)\,dt},\,\displaystyle{F(x) = \int_a^x f(t)\,dt}$とおいて$\varepsilon > 0$を任意にとる. $\{f_n\}$は$[a, b]$上$f$に一様収束するから
+\begin{align}
+\exists N \in \N.\,\forall t \in [a, b].\,\forall n \in \N.\,\left(n \ge N \to |f_n(t) - f(t)| < \dfrac{\varepsilon}{b-a}\right) \label{eq:tmu2026-4k}
+\end{align}
+が成り立つ. \eqref{eq:tmu2026-4k}のような$N$をとれば, $n \ge N$のとき
+\begin{align*}
+|F_n(x) - F(x)| \le \int_a^x |f_n(t) - f(t)|\,dt &\stackrel{\eqref{eq:tmu2026-4k}}{<} \int_a^x \dfrac{\varepsilon}{b-a}\,dt\\
+&<  (b - a)\dfrac{\varepsilon}{b-a} \\
+&= \varepsilon
+\end{align*}
+が成り立つ. これは$\{F_n\}$が$[a, b]$上$F$に一様収束することに他ならない.
+\end{proof}
+ここでは$F_n \rightrightarrows F$を示したが, 単に$F_n(b) \to F(b)$の意味で(つまり定積分として)使うことも多い.
+\begin{thm}{Fubiniの定理}{tmu2026-4k}
+$D \subset \R^2$を縦線閉領域, すなわち$[a, b] \subset \R$上の連続関数$g(x), h(x)\,\,(g(x) < h(x),\,x \in (a,b))$によって$D = \{(x, y) \mid a \le x \le b,\,\,g(x) \le y \le h(x)\}$と表される集合, $f$を$D$上の連続関数とする.　このとき$\displaystyle{\int_{g(x)}^{h(x)} f(x, y)\,dy}$は$x$の連続関数であって, 次が成り立つ (\textbf{累次積分}).
+\[
+\iint_Df(x, y)\,dxdy = \int_a^b\left(\int_{g(x)}^{h(x)} f(x, y)\,dy\right)\,dx
+\]
+これは$D$が横線閉領域の場合にも成り立つ.
+\end{thm}
+\begin{proof}
+(方針) 連続になることは積分区間の分割を用いて, $f$の一様連続性・有界性および$g, h$の連続性から示せる. 累次積分についても, Darbouxの定理からうまい分割を見つけて上限和と下限和の差を評価すればよかったが, 分割の各長方形でまずは$x$を止めて評価し, それは上の主張から$x$について可積分になり, その長方形上で評価できるので, 最後に足し合わせればよい.
+\end{proof}
+\begin{problem}
+\textbf{(再掲) TMU2026年度 問題4-(4).}\\
+次の等式が成り立つことを示せ.
+\[
+\int_0^\infty \dfrac{1 - e^{-tx^2}}{x^2}\,dx = \sqrt{\pi t}\qquad(t > 0)
+\]
+\end{problem}
+最初の一手に困るかもしれないが, 「誘導にのる」意識を強く持つことで乗り越えられるだろう.
+\begin{kaitou}
+$\displaystyle{g_N(\alpha) = \int_0^\infty e^{-\alpha x^2}\,dx}, F(\alpha) \coloneq \dfrac{1}{2}\sqrt{\dfrac{\pi}{\alpha}}$と定めれば
+\begin{itemize}
+\item $g_N$は$F$に$(0, \infty)$上広義一様収束\qquad((1)より)
+\item $g_N(\alpha)$は任意の$[\varepsilon, t]\subset(0, \infty)$上連続\qquad($\displaystyle{f(x, \alpha) = e^{-\alpha x^2}}$の連続性と(2)より)
+\end{itemize}
+なので, (3)の積分順序の交換
+\begin{align*}
+\int_0^\infty\left(\int_\varepsilon^t f(x, \alpha)\,d\alpha\right)\,dx = \int_\varepsilon^t F(\alpha)\,d\alpha
+\end{align*}
+が許される. すなわち
+\begin{align*}
+\int_0^\infty \left(\int_\varepsilon^t e^{-\alpha x^2}\right)\,dx = \int_\varepsilon^t \dfrac{1}{2}\sqrt{\dfrac{\pi}{\alpha}}\,d\alpha &= \dfrac{\sqrt{\pi}}{2}\int_\varepsilon^t \alpha^{-\frac{1}{2}}\,d\alpha = \sqrt{\pi t} - \sqrt{\pi \varepsilon}
+\end{align*}
+である. さて, 上の式は$\varepsilon \to 0$のとき$\sqrt{\pi t}$に収束するので, あとは
+\begin{align}
+\lim_{\varepsilon \to 0}\left\{\int_0^\infty \left(\int_\varepsilon^t e^{-\alpha x^2}\,d\alpha\right)\,dx\right\} = \int_0^\infty \dfrac{1 - e^{-tx^2}}{x^2}\,dx \label{eq:tmu2026-4h}
+\end{align}
+が言えればよい. \eqref{eq:tmu2026-4h}を少し整理すれば
+\begin{align}
+\left|\int_0^\infty \dfrac{1-e^{-tx^2}}{x^2}\,dx - \int_0^\infty \left(\int_\varepsilon^t e^{-\alpha x^2}\,d\alpha\right)\,dx\right| &= \left|\int_0^\infty \dfrac{1-e^{-tx^2}}{x^2}\,dx - \int_0^\infty \dfrac{e^{-\varepsilon x^2} - e^{-tx^2}}{x^2}\,dx\right| \notag\\
+&= \int_0^\infty \dfrac{1 - e^{-\varepsilon x^2}}{x^2}\,dx \label{eq:tmu2026-4hh}
+\end{align}
+が$\varepsilon \to 0$で$0$に収束すること示せばよいことになる. $R \in (0, \infty)$を任意にとって評価すると
+\begin{align}
+\int_0^\infty \dfrac{1 - e^{-\varepsilon x^2}}{x^2}\,dx &= \int_0^R \dfrac{1 - e^{-\varepsilon x^2}}{x^2}\,dx + \int_R^\infty \dfrac{1 - e^{-\varepsilon x^2}}{x^2}\,dx\qquad(\text{積分区間の分割})\notag\\
+&\le \int_0^R \dfrac{\varepsilon x^2}{x^2}\,dx + \int_R^\infty \dfrac{1}{x^2}\,dx\qquad(1 - e^{-u} \le u\text{より}) \notag\\
+&= R\varepsilon + \dfrac{1}{R} \label{eq:tmu2026-4hhh}
+\end{align}
+が成り立つ. 特に\eqref{eq:tmu2026-4hhh}で$R = \frac{1}{\sqrt{\varepsilon}}$とすれば
+\begin{align*}
+\left|\int_0^\infty \dfrac{1-e^{-tx^2}}{x^2}\,dx - \int_0^\infty \left(\int_\varepsilon^t e^{-\alpha x^2}\,d\alpha\right)\,dx\right| &\le 2\sqrt{\varepsilon} \to 0 \qquad(as\,\,\varepsilon \to 0)
+\end{align*}
+が成り立つので, 結論が従う.
+\end{kaitou}
+\begin{marker}
+区間を$[0, R] \cup [R, \infty)$に分割することで少ない予備知識(具体的には学部1,2年で習う微積分)で解くことができるが, Lebesgue積分論の結果を使えば容易に解ける. 実践的なのはこちらだろう.
+\end{marker}
+\begin{kaitou}[別解]
+\eqref{eq:tmu2026-4h}を正当化するために優収束定理を用いる. \eqref{eq:tmu2026-4hh}を評価すればよかったのだが
+\begin{align*}
+h_n(x) &= \dfrac{1 - e^{-\frac{1}{n}x^2}}{x^2},\\
+u(x) &=
+\begin{cases}
+1 & \text{if}\,\,x \in (1, \infty)\\
+\dfrac{1}{x^2} & \text{if}\,\,x \in [0, 1]
+\end{cases}
+\end{align*}
+とおけば
+\begin{enumerate}[label=(\alph*)]
+\item $h_n \stackrel{n \to \infty}{\longrightarrow} 0\quad$
+\item 任意の$n \in \N$に対し$|h_n| \le u$かつ$u$は可積分
+\end{enumerate}
+なので, 
+\begin{align*}
+\lim_{\varepsilon \to 0} \int_0^\infty \dfrac{1 - e^{-\varepsilon x^2}}{x^2}\,dx &= \lim_{n \to \infty}\int_0^\infty h_n(x)\,dx\\
+&=\int_0^\infty\left(\lim_{n\to \infty} h_n(x)\right)\,dx\qquad(\text{優収束定理より})\\
+&= 0
+\end{align*}
+がいえる.
+\end{kaitou}
+優収束定理はLebesgue積分論の応用における最も重要な定理の一つであり, 試験でも (複素解析の経路積分などで) かなりの効力を発揮する. ここで主張を確認しておこう : 
+\begin{thm}{優収束定理 (dominated convergence theorem, DCT)}{tmu2026-4l}
+$(X, \mathcal{F}, \mu)$を測度空間, $f, f_n$をLebesgue可測関数とする. このとき各点で
+\begin{enumerate}[label=(\alph*)]
+\item $\displaystyle{\lim_{n \to \infty} f_n = f}$かつ
+\item 任意の$n \in \N$について$|f_n| \le F$を満たすLebesgue可積分関数$F$が存在する
+\end{enumerate}
+ならば$f_n, f$はLebesgue可積分であり
+\[
+\lim_{n \to \infty} \int f_n\,d\mu = \int f\,d\mu
+\]
+が成り立つ. 
+\end{thm}
+特に$f_n : \R \to \R$として適用したのが上の別解である. また「各点で(a), (b)が成り立つとき」としたが, 実際はほとんど至るところ ($\mu-$a.e.) で成立すれば十分である. 証明にはFatouの補題を使う. 
+
+優収束定理の特別な場合である有界収束定理も便利である:
+\begin{thm}{有界収束定理}{tmu2026-4m}
+$f, f_n$を\textbf{有限測度空間}$(X, \mathcal{F}, \mu)$上のLebesgue可測関数とする. このとき各点で
+\begin{enumerate}[label=(\alph*)]
+\item $\displaystyle{\lim_{n \to \infty} f_n = f}$かつ
+\item 任意の$n \in \N$について$|f_n| \le M$を満たす定数$M \ge 0$が存在する (i.e. $|f_n|$は一様有界)
+\end{enumerate}
+ならば$f_n, f$はLebesgue可積分であり
+\[
+\lim_{n \to \infty} \int f_n\,d\mu = \int f\,d\mu
+\]
+が成り立つ. 
+\end{thm}
+\begin{proof}
+優収束定理を認めれば明らかである. 実際, 測度空間$(X, \mathcal{F}, \mu)$について$\mu(X) < \infty$より
+\[
+\int M\,d\mu = M\mu(X) < \infty
+\]
+が成り立つので, 優収束定理で$F \equiv M$とすればよい.
+\end{proof}
+$f_n(x) = x^n$として$\displaystyle{\lim_{n \to  \infty} \int_0^1 f_n(x)\,dx}$について考えてみよう. まず$[0, 1]$は有限測度であり, 
+\[
+f(x) = 
+\begin{cases}
+0 & \text{if}\,\,x \in [0, 1)\\
+1 & \text{if}\,\,x = 1
+\end{cases}
+\]
+とおけば(a)\,$\displaystyle{\lim_{n \to \infty}f_n = f}$かつ(b) 任意の$n \in \N$について$\displaystyle{\sup_{x \in [0, 1]}|f_n| \le 1}$が成り立つので, 有界収束定理から
+\[
+\lim_{n \to \infty}\int_0^1 f_n(x)\,dx = \int_0^1 f(x)\,dx = 0
+\]
+がわかる. $\displaystyle{\int_0^1 f_n(x)\,dx = \dfrac{1}{n + 1}} \stackrel{n \to \infty}{\longrightarrow} 0$だから, この計算は正しい. ここで$f_n$は$f$に一様収束しないので, 上で示した定理では交換が正当化されないことに注意したい.
+\begin{ex}{例: 有界収束定理の使い方}
+きちんと役に立つ例として
+\[
+\lim_{n \to \infty}\int_0^{\pi/2}\sin^n\theta\,d\theta
+\]がある. これは
+\begin{enumerate}[label=(\alph*)]
+\item $\sin^n\theta \stackrel{n \to \infty}{\longrightarrow} 0$\,\,a.e. \footnote{$\theta = \frac{\pi}{2}$のときに限り$1$に, それ以外では$0$に収束する.}
+\item 任意の$n\in\N$について$\displaystyle{\sup_{\theta \in [0, \frac{\pi}{2}]}|\sin^n\theta| \le 1}$
+\end{enumerate}
+より
+\[
+\lim_{n \to \infty}\int_0^{\pi/2}\sin^n\theta\,d\theta = \int_0^{\pi/2} 0\,d\theta = 0
+\]
+と計算できる.
+\end{ex}
+先に述べたFubiniの定理\ref{thm:tmu2026-4k}も, Lebesgue積分を用いることで, 緩やかな仮定のもとで累次積分が許されることが知られている.
+\begin{thm}{Fubini-Tonelliの定理}{}
+$f : \R^2 \to \R$をLebesgue可測とする. このとき以下が成り立つ\footnote{(a)は各辺が$\infty$の場合も含め成立する} :
+\begin{enumerate}[label = (\alph*)]
+\item 
+\[
+\iint_{\R^2} |f(x, y)|\,dxdy = \int_{\R} \left(\int_\R|f(x, y)|\,dx\right)\,dy = \int_\R \left(\int_\R|f(x, y)|\,dy\right)\,dx
+\]
+\item (a)のいずれかが有限ならば
+\[
+\iint_{\R^2} f(x, y)\,dxdy = \int_\R \left(\int_\R f(x, y)\,dx\right)\,dy = \int_\R \left(\int_\R f(x, y)\,dy\right)\,dx
+\]
+が成り立つ.
+\end{enumerate}
+\end{thm}
+Riemann積分の範囲のFubiniの定理\ref{thm:tmu2026-4k}は, Fubini-Tonelliの定理で (縦線閉集合$D$と連続関数$f$について)
+\[
+f^*(x, y) = 
+\begin{cases}
+f(x, y) & \text{if}\,\,(x, y) \in D\\
+0 & \text{otherwise}
+\end{cases}
+\]
+とすれば直ちに従う. Fubini-Tonelliの定理は定義域を$\R^d$としても同様に成り立ち, さらに$\R^d$に限らず, 一般の$\sigma$-有限測度空間の直積上でも順序交換が許される.
+\section{2022年度}
+\subsection{問題1}
+\begin{problem}
+\textbf{TMU2022年度I 問題1.}\\
+$a$を実数として，行列$A, B$を
+\[
+A=
+\begin{pmatrix}
+-3 & -1 & -1 & 2 \\
+-1 & 1 & -3 & 2 \\
+3 & -1 & 5 & -1 \\
+2 & 3 & -4 & -5
+\end{pmatrix},
+\qquad
+B=
+\begin{pmatrix}
+1 & 4 & 1 \\
+-1 & 0 & 3 \\
+0 & -4 & -a-3 \\
+-1 & -1 & -a^2+3
+\end{pmatrix}
+\]
+とする．線形写像$f:\mathbb{R}^4 \to \mathbb{R}^4,\ g:\mathbb{R}^3 \to \mathbb{R}^4$を
+\[
+f(\bm{x})=A\bm{x}\quad (\bm{x}\in\mathbb{R}^4),
+\qquad
+g(\bm{y})=B\bm{y}\quad (\bm{y}\in\mathbb{R}^3)
+\]
+で定め，$g$の像をそれぞれ$\Im f,\Im g$とする．以下の問いに答えよ．
+
+\begin{enumerate}[label=(\arabic*)]
+\item $\Im f$の次元と1組の基底を求めよ．
+\item $g$が単射でないとき，$a$の値を求めよ．
+\item $\Im f$と$\Im g$が一致するとき，$a$の値を求めよ．
+\end{enumerate}
+\end{problem}
+
+\begin{kaitou}[(1)の解]
+$A = \left(\bm{a}_1\:\bm{a}_2\:\bm{a}_3\:\bm{a}_4\right)$と列ベクトルに分解する. $\Im f$を知るためには, $\bm{a}_1, \bm{a}_2, \bm{a}_3, \bm{a}_4$の一次関係を調べればよい.
+$A$を行基本変形すれば
+\[
+A=
+\begin{pmatrix}
+-3 & -1 & -1 & 2 \\
+-1 & 1 & -3 & 2 \\
+3 & -1 & 5 & -1 \\
+2 & 3 & -4 & -5
+\end{pmatrix}
+\overset{\text{行基本変形}}{\sim}
+\begin{pmatrix}
+1 & 0 & 1 & 0\\
+0 & 1 & -2 & 0\\
+0 & 0 & 0 & 1\\
+0 & 0 & 0 & 0
+\end{pmatrix}
+\]
+だから$\bm{a}_1, \bm{a}_2, \bm{a}_4$は一次独立\footnote{行基本変形は左から基本行列をかけることに対応するので, 列ベクトルの一次関係は変わらない.}. したがって
+\begin{answerbox}
+\[
+\dim\left(\Im f\right) = 3, \:\:\Im f =
+\left\langle 
+\begin{pmatrix}
+-3\\
+-1\\
+3\\
+2
+\end{pmatrix}
+,
+\begin{pmatrix}
+-1\\
+1\\
+-1\\
+3
+\end{pmatrix}
+,
+\begin{pmatrix}
+2\\
+2\\
+-1\\
+-5
+\end{pmatrix}
+\right\rangle_{\R}
+\]
+\end{answerbox}
+がわかる.
+\end{kaitou}
+\begin{kaitou}[(2)の解]
+$g$は線形写像なので
+\[
+g\text{が単射でない} \iff \Ker g \ne \{\bm{0}\} \iff B\text{はfull rankでない}
+\]
+が成り立つ. $B$を行基本変形すれば
+\[
+B=
+\begin{pmatrix}
+1 & 4 & 1 \\
+-1 & 0 & 3 \\
+0 & -4 & -a-3 \\
+-1 & -1 & -a^2+3
+\end{pmatrix}
+\overset{\text{行基本変形}}{\sim}
+\begin{pmatrix}
+1 & 0 & -3 \\
+0 & 1 & 1 \\
+0 & 0 & 1 - a \\
+0 & 0 & (1 + a)(1 - a)
+\end{pmatrix}
+\to 
+\begin{pmatrix}
+1 & 0 & -3 \\
+0 & 1 & 1 \\
+0 & 0 & 1 - a \\
+0 & 0 & 0
+\end{pmatrix}
+\]
+となるので, $\boxed{a = 1}$のとき$g$は単射でない.
+\end{kaitou}
+\begin{thm}{単射の同値条件}{}
+$V, W$をベクトル空間, $f : V \to W$を線形写像とする. このとき
+\[
+f\text{は単射} \iff \Ker f = \{\bm{0}\}
+\]
+が成り立つ.
+\end{thm}
+\begin{proof}
+$\Rightarrow$は単射の定義から従うので, 逆を確認する. すなわち, $\ker f = \{\bm{0}\}$を仮定して
+\[
+\forall \bm{x}, \bm{y} \in V. \:\left(f(\bm{x}) = f(\bm{y}) \to \bm{x} = \bm{y}\right)
+\]
+を導けばよい. 実際, 線形性から
+\[
+ 0 = f(\bm{x}) - f(\bm{y}) = f(\bm{x} - \bm{y})
+\]
+なので, $\bm{x} - \bm{y} \in \Ker f$, つまり$\bm{x} = \bm{y}$が従う.
+\end{proof}
+\begin{kaitou}[(3)の解]
+$B = \left(\bm{b}_1\:\bm{b}_2\:\bm{b}_3\right)$と列ベクトルに分割しておく.
+\[
+\Im f  = \Im g \iff \Im f \supset \Im g \quad \text{かつ} \quad \dim\left(\Im f\right) = \dim\left(\Im g\right)
+\]
+であり, $\bm{b}_1, \bm{b}_2 \in \Im f$は成り立つので, まず$\bm{b}_3$が$\Im f$に属するか調べよう. これは「$A\bm{x} = \bm{b}_3$を満たす$\bm{x}$が存在するか」という問いであり, 拡大係数行列と係数行列のrankが一致することと同値だったので, (1)と合わせて$\left(\bm{a}_1\:\bm{a}_2\:\bm{a}_4\:|\:\bm{b}_3\right)$を行基本変形すればわかる :
+\[
+\left(\bm{a}_1\:\bm{a}_2\:\bm{a}_4\:|\:\bm{b}_3\right) =
+\left(
+\begin{array}{ccc|c}
+-3 & -1 & 2 & 1\\
+-1 & 1 & 2 & 3\\
+3 & -1 & -1 & -a-3\\
+2 & 3 & -5 & -a^2+3
+\end{array}
+\right)
+\overset{\text{行基本変形}}{\sim}
+\left(
+\begin{array}{ccc|c}
+1 & 0 & -1  & -1 \\
+0 & 1 & 1 & 2 \\
+0 & 0& 3 & -a + 2 \\
+0 & 0& 0& (a+3)(a-1)
+\end{array}
+\right)
+\]
+つまり$a = -3\:\text{or}\:1$である. あとは$\dim(\Im f) = \dim(\Im g)$となるかだが, (1)より$\dim(\Im f) = 3$だから$B$はfull rankであることが必要で, (2)から$a \ne 1$とわかる. したがって$\boxed{a = -3}$のとき $\Im f = \Im g$が成り立つ.
+\end{kaitou}
+\begin{marker}
+問題の設定から$\bm{b}_1, \bm{b}_2 \in \Im f$が期待されるが, 当然明らかではない. 「$\bm{b}_1, \bm{b}_2\in\Im f$は認めてよい」という但し書きこそないが, さすがに「そのような$a$は存在しない」という答えも考えにくいので, 答案では計算せずに認めた. もし余裕があれば, 線形代数の基本定理を用いて確認するのもいいだろう.
+\end{marker}
+\begin{kaitou}[(3)の別解]
+まず$\bm{b}_1, \bm{b}_2, \bm{b}_3 \in \Im f$が必要だった. $\tilde{A} \coloneq (\bm{a}_1\:\bm{a}_2\:\bm{a}_4)$とおけば
+\[
+\Im A = \Im \tilde{A} = (\Ker {}^t\!\tilde{A})^{\perp}
+\]
+であり, (1)より$\dim(\Ker {}^t\!\tilde{A}) = 1$だから, $\Ker {}^t\!\tilde{A}$の元がわかれば容易に判定できる. 実際,
+\[
+{}^t\!\tilde{A} =
+\begin{pmatrix}
+-3 & -1 & 3 & 2\\
+-1 & 1 & -1 & 3\\
+2 & 2 & -1 & -5\\
+\end{pmatrix}
+\overset{\text{行基本変形}}{\sim}
+\begin{pmatrix}
+1 & 0 & 0 & -9/4\\
+0 & 1 & 0 & -5/4\\
+0 & 0 & 1 & -2
+\end{pmatrix}
+\]
+より
+\[
+\Im A = 
+(\Ker {}^t\!\tilde{A})^{\perp}
+=
+\left\{
+\bm{x} \in \R^4 \,\middle|\,
+\bm{x} \perp
+\begin{pmatrix}
+9\\
+5\\
+8\\
+4
+\end{pmatrix}
+\right\}
+\]
+であり, $\bm{b}_1, \bm{b}_2 \in \Im A$がわかる. また
+\[
+\bm{b}_3 \in \Im A \iff 
+\left\langle 
+\begin{pmatrix}
+9\\
+5\\
+8\\
+4
+\end{pmatrix}
+,
+\begin{pmatrix}
+1\\
+3\\
+-a-3\\
+-a^2+3
+\end{pmatrix}
+\right\rangle
+= 0
+\iff
+(a+3)(a-1) = 0 
+\]
+なので, $a = 1\:\text{or}\:-3$が必要. あとは同様.
+\end{kaitou}
+線形代数の基本定理を確認しておこう :
+\begin{thm}{(実行列版)線形代数の基本定理}{}
+$A \in M_n(\R)$のとき
+\[
+\R^n = \Im A \oplus \Ker {}^t\!A
+\]
+が成り立つ.
+\end{thm}
+\begin{proof}
+$(\Im A)^{\perp} = \Ker {}^t\!A$がいえれば, 後は$\R^n = \Im A \oplus (\Im A)^{\perp}$と直交分解できることから従う.\\
+$(\supset)$ $\bm{y} \in \Ker {}^t\!A$とする. 任意の$\bm{x} \in \R^n$に対して
+\[
+\langle A\bm{x}, \bm{y} \rangle = \langle \bm{x}, {}^t\!A\bm{y} \rangle = \langle \bm{x}, \bm{0} \rangle = 0 
+\]
+より$\bm{y} \perp \Im A$, すなわち$\bm{y} \in (\Im A)^{\perp}$である.\\
+$(\subset)$ $\bm{y} \in (\Im A)^{\perp}$とする. このとき任意の$\bm{x} \in \R^n$に対して
+\[
+0 = \langle A\bm{x}, \bm{y} \rangle = \langle \bm{x}, \!^{t}A\bm{y} \rangle 
+\]
+が成り立つので, 特に$\bm{x} = {}^t\!Ay$とすれば
+\[
+\langle {}^t\!A\bm{y}, {}^t\!A\bm{y} \rangle = 0
+\]
+となるので, ${}^t\!A\bm{y} = 0$, すなわち$\bm{y} \in \Ker {}^t\!A$が従う.
+\end{proof}
+複素行列についても同様に示せる. 
+\begin{thm}{線形代数の基本定理}{}
+$A \in M_n(\C)$のとき
+\[
+\C^n = \Im A \oplus \Ker A^*
+\]
+が成り立つ.
+\end{thm}
+
+\begin{marker}
+またより一般に, 無限次元の場合にも次の事実が知られている:
+$\mathcal{H}_1, \mathcal{H}_2$を\textit{Hilbert}空間として, $T \in \mathbf{B}(\mathcal{H}_1, \mathcal{H}_2)$とするとき
+\begin{enumerate}
+\item[(1)]$\mathcal{H}_1 = \Ker T \oplus \overline{\mathcal{R}(T^*)}$
+\item[(2)]$\mathcal{H}_2 = \Ker T^* \oplus \overline{\mathcal{R}(T)}$
+\end{enumerate}
+が成り立つ.
+\end{marker}
+\subsection{問題2}
+\begin{problem}
+\textbf{TMU2022年度I 問題2.}\\
+$V$をベクトル
+\[
+\begin{pmatrix}
+1 \\ 3 \\ -1 \\ 1
+\end{pmatrix},
+\quad
+\begin{pmatrix}
+3 \\ 4 \\ -1 \\ 2
+\end{pmatrix},
+\quad
+\begin{pmatrix}
+-3 \\ 1 \\ -1 \\ -1
+\end{pmatrix}
+\]
+で張られる$\mathbb{R}^4$の部分空間とする．さらに
+\[
+V^\perp=\{\bm{x}\in\mathbb{R}^4 \mid \forall \bm{y}\in V,\ \bm{x}\perp\bm{y}\}
+\]
+と定める．ただし$\mathbb{R}^4$には標準内積を入れる．以下の問いに答えよ．
+
+\begin{enumerate}[label=(\arabic*)]
+\item $V$の次元と1組の正規直交基底を求めよ．
+\item $V^\perp$は$\mathbb{R}^4$の部分空間であることを示し，$V^\perp$の1組の基底を求めよ．ただし正規直交基底である必要はない．
+\item 
+\[
+\bm{a}=
+\begin{pmatrix}
+3 \\ 3 \\ 3 \\ 3
+\end{pmatrix}
+\]
+とする．$\bm{a}=\bm{b}+\bm{c},\ \bm{b}\in V,\ \bm{c}\in V^\perp$となる$\bm{b},\bm{c}$を求めよ．
+\end{enumerate}
+\end{problem}
+\begin{kaitou}[(1)の解]
+\[
+\bm{v}_1=
+\begin{pmatrix}
+1\\
+3\\
+-1\\
+1
+\end{pmatrix}
+,\:
+\bm{v}_2=
+\begin{pmatrix}
+3\\
+4\\
+-1\\
+2
+\end{pmatrix}
+,\:
+\bm{v}_3=
+\begin{pmatrix}
+-3\\
+1\\
+-1\\
+-1
+\end{pmatrix}
+\]
+とおく. $V = \langle \bm{v}_1,\:\bm{v}_2, \bm{v}_3\rangle_\R$だったので, まずは$V$の次元を調べるために$(\bm{v}_1\:\bm{v}_2\:\bm{v}_3)$を行基本変形すると
+\[
+(\bm{v}_1\:\bm{v}_2\:\bm{v}_3) \overset{\text{行基本変形}}{\sim}
+\begin{pmatrix}
+1 & 0 & 3\\
+0 & 1 & -2\\
+0 & 0 & 0\\
+0 & 0 & 0
+\end{pmatrix}
+\]
+より$\bm{v}_1, \bm{v}_2$は一次独立かつ$\bm{v}_3 = 3\bm{v}_1-2\bm{v}_2$と書ける. したがって\boxed{\dim V = 2}. 正規直交基底(orthonormal basis, 以下ONB)$\{\bm{w}_1, \bm{w}_2\}$は$\bm{v}_1, \bm{v}_2$に\textit{Gram-Schmidt}の直交化法\ref{thm:tmu2022-2a}を用いて
+\begin{align*}
+\text{正規化}:\:&\bm{w}_1 = \dfrac{1}{\|\bm{v}_1\|}\bm{v}_1 = 
+\dfrac{1}{2\sqrt{3}}
+\begin{pmatrix}
+1\\
+3\\
+-1\\
+1
+\end{pmatrix}
+\\
+\text{直交化}:\:&\tilde{\bm{v}_2} \coloneq \bm{v}_2 - \langle \bm{v}_2, \bm{w}_1 \rangle\bm{w}_1 =  \dfrac{1}{2}
+\begin{pmatrix}
+3\\
+-1\\
+1\\
+1
+\end{pmatrix}\\
+\text{正規化}:\:&\bm{w}_2 = 
+\dfrac{1}{2\sqrt{3}}
+\begin{pmatrix}
+3\\
+-1\\
+1\\
+1
+\end{pmatrix}
+\end{align*}
+と求まる.
+\begin{answerbox}
+$V$のONB: 
+\[
+\left\{
+\dfrac{1}{2\sqrt{3}}
+\begin{pmatrix}
+1\\
+3\\
+-1\\
+1
+\end{pmatrix}
+,\:
+\dfrac{1}{2\sqrt{3}}
+\begin{pmatrix}
+3\\
+-1\\
+1\\
+1
+\end{pmatrix}
+\right\}
+\]
+\end{answerbox}
+\end{kaitou}
+複素内積空間の場合にも, 与えられた基底からONBを構成できるのであった:
+\begin{thm}{\textit{Gram-Schmidt}の直交化法}{tmu2022-2a}
+$\left(V, \langle \cdot, \cdot\rangle\right)$を複素内積空間, $\{\bm{v}_1, \cdots, \bm{v}_n\}$を$V$の基底とし, $\bm{w}_1, \cdots, \bm{w}_n$を次のよう帰納的に定める:
+\begin{align*}
+\text{正規化}:\:&\bm{w}_1 = \dfrac{1}{\|\bm{v}_1\|}\bm{v}_1\\
+\text{直交化}(2 \le k \le n):\: &\tilde{\bm{v}_k} = \bm{v}_k - \sum_{j = 1}^{k-1} \langle \bm{v}_k, \bm{w}_j \rangle \bm{w}_j\\
+\text{正規化}(2 \le k \le n): \:&\bm{w}_k = \dfrac{1}{\|\tilde{\bm{v}_k}\|}\tilde{\bm{v}_k}
+\end{align*}
+このとき$\{\bm{w}_1, \cdots, \bm{w}_n\}$は$V$のONBとなる.
+\end{thm}
+\begin{marker}
+帰納的に定めているので, 無限次元においても直交系にG-Sを施すことで正規直交系をつくることができる.
+\end{marker}
+
+\begin{kaitou}[(2)の解]
+\uline{$V^{\perp}$は$\R^4$の部分空間であること}:\:$\bm{0}\in V^\perp$は明らかなので, スカラー倍と演算に閉じていることを示す. $\bm{x}, \bm{y}\in V^\perp, \lambda\in\R$を任意にとる. このとき任意の$\bm{v}\in V$に対して内積の線形性より
+\[
+\langle \lambda\bm{x}+\bm{y}, \bm{v} \rangle = \lambda\langle \bm{x}, \bm{v}\rangle + \langle \bm{y}, \bm{v} \rangle = 0
+\]
+なので$\lambda\bm{x}+\bm{y} \in V^\perp$が成り立ち, 結論が従う.\\
+\uline{$V^\perp$の基底}:\:(1)より
+\[
+V^\perp = \Ker {}^t\!(\bm{v}_1\:\bm{v}_2\:\bm{v}_3) = \Ker {}^t\:(\bm{v}_1\:\bm{v}_2)
+\]
+なので, ${}^t\:(\bm{v}_1\:\bm{v}_2)$を行基本変形すればよい:
+\[
+{}^t\:(\bm{v}_1\:\bm{v}_2) = 
+\begin{pmatrix}
+1 & 3 & -1 & 1\\
+3 & 4 & -1 & 2
+\end{pmatrix}
+\overset{\text{行基本変形}}{\sim}
+\begin{pmatrix}
+1 & 0 & 1/5 & 2/5\\
+0 & 1 & -2/5 & 1/5
+\end{pmatrix}
+\]
+だから
+\begin{answerbox}
+\[
+V^\perp = \left\langle 
+\begin{pmatrix}
+-1\\
+2\\
+5\\
+0
+\end{pmatrix}
+,
+\begin{pmatrix}
+-2\\
+-1\\
+0\\
+5
+\end{pmatrix}
+\right\rangle
+\]
+\end{answerbox}
+\end{kaitou}
+
+\begin{kaitou}[(3)の解]
+($V$のONB$\{\bm{w}_1, \bm{w}_2\}$をすでに求めたので, $\bm{a}$の$V$への正射影$\bm{b}$は簡単に求まる:
+\begin{align*}
+\bm{b} &= \langle \bm{a}, \bm{w}_1 \rangle\bm{w}_1 + \langle \bm{a}, \bm{w}_2 \rangle\bm{w}_2\\
+	& = \left\langle
+\begin{pmatrix}
+3\\
+3\\
+3\\
+3
+\end{pmatrix}
+,\dfrac{1}{2\sqrt{3}}
+\begin{pmatrix}
+1\\
+3\\
+-1\\
+1
+\end{pmatrix}
+\right\rangle \dfrac{1}{2\sqrt{3}}
+\begin{pmatrix}
+1\\
+3\\
+-1\\
+1
+\end{pmatrix}
++
+\left\langle
+\begin{pmatrix}
+3\\
+3\\
+3\\
+3
+\end{pmatrix}
+,\dfrac{1}{2\sqrt{3}}
+\begin{pmatrix}
+3\\
+-1\\
+1\\
+1
+\end{pmatrix}
+\right\rangle
+\dfrac{1}{2\sqrt{3}}
+\begin{pmatrix}
+3\\
+-1\\
+1\\
+1
+\end{pmatrix}
+= 
+\begin{pmatrix}
+4\\
+2\\
+0\\
+2
+\end{pmatrix}
+\end{align*}
+したがって
+\begin{answerbox}
+\[
+\bm{b}=
+\begin{pmatrix}
+4\\
+2\\
+0\\
+2
+\end{pmatrix}
+,\:
+\bm{c}=
+\bm{a}-\bm{b}=
+\begin{pmatrix}
+-1\\
+1\\
+3\\
+1
+\end{pmatrix}
+\]
+\end{answerbox}
+\end{kaitou}
+線形代数の基本定理を示すときにも使った, 有限次元ベクトル空間の直交分解と合わせて, 正射影についてまとめておこう.
+\begin{dfn}{射影}{tmu2022-2b}
+$V$を$\R$上のベクトル空間, $p : V \to V$を線形写像とする.
+\[
+p \circ p = p
+\]
+が成り立つとき, $p$を\textbf{射影}という.
+\end{dfn}
+\begin{dfn}{直交補空間}{}
+$(V, \left\langle \cdot, \cdot \right\rangle)$を実内積空間, $W$を$V$の部分空間とする. このとき$W^\perp \subset V$を
+\[
+W^\perp = \left\{\bm{x} \in V \mid \forall \bm{y}\in W.\,\langle \bm{x}, \bm{y}\rangle = 0\right\}
+\]
+により定めると, $W^\perp$は$V$の部分空間となり, これを$W$の\textbf{直交補空間}とよぶ.
+\end{dfn}
+\begin{dfn}{(代数的) 直和}{}
+$V$を$\R$上のベクトル空間, $W_1, \cdots, W_n$を$V$の部分空間とする. 任意の$\bm{x}\in W_1+\cdots+W_n$が
+\[
+\bm{x} = \bm{x_1}+\cdots+\bm{x_n}\qquad(\bm{x_j}\in W_j)
+\]
+と一意に表されるとき
+\[
+W_1+\cdots+W_n = W_1 \oplus \cdots \oplus W_n
+\]
+と書いて, $W_1+\cdots+W_n$は$W_1,\cdots,W_n$の\textbf{直和}であるという. これは
+\[
+j=2, \cdots, n\text{について} (W_1+\cdots+W_{j-1})\cap W_j = \{\bm{0}\}
+\]
+と同値である. 特に$n=2$の場合, $W_1 \cap W_2 = \{\bm{0}\}$と同値である.
+\end{dfn}
+
+\begin{thm}{正射影}{}
+$V$を$n$次元実内積空間, $W$を$V$の$k$次元部分空間, $\{\bm{w}_j\}_{j=1}^k$を$W$のONBとする. このとき
+\[
+V = W \oplus W^\perp
+\]
+と直交分解でき, さらに$\bm{a}\in V$の$W$への正射影は
+\[
+P_W(\bm{a}) = \sum_{j=1}^k \langle \bm{a}, \bm{w}_j \rangle\bm{w}_j
+\]
+である.
+\end{thm}
+\begin{proof}
+任意の$\bm{a}\in V$について
+\[
+P_W(\bm{a}) = \sum_{j=1}^k \langle \bm{a}, \bm{w}_j \rangle\bm{w}_j \in W
+\]
+は明らかなので, $\bm{a}-P_W(\bm{a}) \in W^\perp$を示せば$V = W + W^\perp$としてよい. ONBの定義から
+\[
+\langle \bm{w}_i, \bm{w}_j \rangle = \delta_{ij}
+\]
+なので, 任意のONBの元$\bm{w}_i\in W$に対して
+\begin{align*}
+\left\langle \bm{a}-P_W(\bm{a}), \bm{w}_i \right\rangle
+&=
+\left\langle
+\bm{a}-\sum_{j=1}^k \langle \bm{a}, \bm{w}_j \rangle \bm{w}_j,
+\bm{w}_i
+\right\rangle
+=
+\left\langle \bm{a}, \bm{w}_i\right\rangle
+-
+\left\langle
+\sum_{j=1}^k \langle \bm{a}, \bm{w}_j\rangle \bm{w}_j,
+\bm{w}_i
+\right\rangle\\
+&=
+\left\langle \bm{a}, \bm{w}_i\right\rangle
+-
+\sum_{j=1}^k
+\langle \bm{a}, \bm{w}_j\rangle
+\left\langle \bm{w}_j,\bm{w}_i \right\rangle
+=
+\left\langle \bm{a}, \bm{w}_i\right\rangle
+-
+\left\langle \bm{a}, \bm{w}_i\right\rangle
+=0
+\end{align*}
+である. すなわち$W$の任意の元$\bm{w} = \sum_{j=1}^k \lambda_j\bm{w}_j\:(\lambda_j \in \R)$について
+\[
+\left\langle \bm{a}-P_W(\bm{a}), \bm{w} \right\rangle = \sum_{j=1}^k \lambda_j\left\langle \bm{a}-P_W(\bm{a}), \bm{w}_j \right\rangle = 0
+\]
+なので$V = W + W^\perp$が従う. また$\bm{x}\in W \cap W^\perp$ならば$\bm{x}\in W^\perp$から
+\[
+\forall \bm{y}\in W.\,\left\langle \bm{x}, \bm{y} \right\rangle = 0
+\]
+かつ$\bm{x}\in W$なので, $\bm{y}\coloneq \bm{x}$とすれば
+\[
+\langle \bm{x}, \bm{x} \rangle = 0 \iff \bm{x} = \bm{0}
+\]
+つまり$W \cap W^\perp = \{\bm{0}\}$が従う. これは$V = W  \oplus W^\perp$であることに他ならない.
+\end{proof}
+
+\begin{thm}{}{}
+$W$を$\R^n$の$k$次元部分空間, $\{\bm{w}_j\}_{j=1}^k$を$W$のONBとする. このとき
+\[
+\R^n = W \oplus W^\perp
+\]
+と直交分解でき, さらに$\bm{a}\in\R^n$の$W$への正射影は
+\[
+P_W(\bm{a}) = \sum_{j=1}^k \langle \bm{a}, \bm{w}_j \rangle\bm{w}_j
+\]
+である.
+\end{thm}
+\begin{marker}
+この主張も無限次元に拡張される: $\mathcal{H}$を\textit{Hilbert}空間, $\{e_j\}_{j=1}^\infty$を$\mathcal{H}$の直交系とし, $\mathcal{K} = \overline{\text{span}\{e_j\}_{j=1}^\infty}$とする. $x \in \mathcal{H}$に対して
+\[
+x_n = \sum_{j=1}^n \langle x, e_j \rangle e_j
+\]
+とおくと, $\{x_n\}_{n=1}^\infty$は$x$の$\mathcal{K}$への射影$P_\mathcal{K}(x)$に収束する.
+\end{marker}
+
+\begin{lem}{例: Fourier級数展開}
+$C([0, 2\pi])$ に内積
+\[
+\langle f,g\rangle
+=
+\int_{0}^{2\pi} f(x)g(x)\,dx
+\]
+を入れる. このとき
+\[
+e_0(x)=\frac{1}{\sqrt{2\pi}},
+\qquad
+e_n^c(x)=\frac{1}{\sqrt{\pi}}\cos nx,
+\qquad
+e_n^s(x)=\frac{1}{\sqrt{\pi}}\sin nx
+\quad(n\geq 1)
+\]
+とおくと
+\[
+\{e_0,e_n^c,e_n^s \mid n \in \N\}
+\]
+は$C([0,2\pi])$の正規直交系である. Fourier級数展開は, 関数$f$をこの正規直交系の各方向に射影していく操作として理解できる. なお, この内積から定まるノルムで完備化した関数空間が$L^2([0, 2\pi])$である.
+\end{lem}
+もちろんONBを使わずに解くこともできるが, $4\times5$の拡大係数行列を行基本変形しなければならないので, 中々大変である.
+\begin{kaitou}[2-(3)の別解]
+\[
+V = \left\langle
+\begin{pmatrix}
+1\\
+3\\
+-1\\
+1
+\end{pmatrix}
+,
+\begin{pmatrix}
+3\\
+-1\\
+1\\
+1
+\end{pmatrix}
+\right\rangle
+,\:
+V^\perp=
+\left\langle
+\begin{pmatrix}
+-1\\
+2\\
+5\\
+0
+\end{pmatrix}
+,
+\begin{pmatrix}
+-2\\
+-1\\
+0\\
+5
+\end{pmatrix}
+\right\rangle
+\]
+だったので, これらを基底としたときの$\bm{a}$の表示は連立方程式を解けばわかる. 実際,
+\[
+\left(
+\begin{array}{cccc|c}
+1 & 3 & -1 & -2 & 3\\
+3 & -1 & 2 & -1 & 3\\
+-1 & 1 & 5 & 0 & 3\\
+1 & 1 & 0 & 5 & 3
+\end{array}
+\right)
+\overset{\text{行基本変形}}{\sim}
+\left(
+\begin{array}{cccc|c}
+1 & 0 & 0 & 0 & 1\\
+0 & 1 & 0 & 0 & 1\\
+0 & 0 & 1 & 0 & 3/5\\
+0 & 0 & 0 & 1 & 1/5
+\end{array}
+\right)
+\]
+なので
+\begin{answerbox}
+\begin{align*}
+\bm{b} &= 
+\begin{pmatrix}
+1\\
+3\\
+-1\\
+1
+\end{pmatrix}
++
+\begin{pmatrix}
+3\\
+-1\\
+1\\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+4\\
+2\\
+0\\
+2
+\end{pmatrix},\\
+\bm{c} &=
+\dfrac{3}{5}
+\begin{pmatrix}
+-1\\
+2\\
+5\\
+0
+\end{pmatrix}
++
+\dfrac{1}{5}
+\begin{pmatrix}
+-2\\
+-1\\
+0\\
+5
+\end{pmatrix}
+=
+\begin{pmatrix}
+-1\\
+1\\
+3\\
+1
+\end{pmatrix}
+\end{align*}
+\end{answerbox}
+\end{kaitou}
+
+\subsection{問題3}
+\begin{problem}
+\textbf{TMU2022年度I 問題3.}\\
+\[
+f(x)=\frac{x}{x^3+1}
+\]
+とおくとき，以下の問いに答えよ．
+
+\begin{enumerate}[label=(\arabic*)]
+\item 不定積分$\displaystyle{\int f(x)\,dx}$
+を求めよ．
+\item 広義積分$\displaystyle{\int_0^\infty f(x)\,dx}$
+の収束・発散を判定し，収束するときはその値を求めよ．
+\item 次の広義積分の収束・発散を判定し，収束するときはその値を求めよ．
+\[
+\iint_D \frac{1}{(x^2+y^2)^{\frac{3}{2}}+1}\,dxdy,
+\qquad
+D=\{(x,y)\mid x\ge 0,\ y\ge 0\}.
+\]
+\end{enumerate}
+\end{problem}
+\begin{kaitou}[(1)の解]
+まず$f(x)$を部分分数分解すると
+\[
+\dfrac{x}{x^3+1} = \cfrac{-\frac{1}{3}}{x+1} + \cfrac{\frac{1}{3}x + \frac{1}{3}}{x^2-x+1}
+\]
+なので
+\begin{align*}
+\int f(x)\, dx &= -\dfrac{1}{3}\int \dfrac{1}{x+1}\,dx + \int \cfrac{\frac{1}{3}(x+1)}{x^2-x+1}\,dx\\
+	&= -\dfrac{1}{3}\int \dfrac{1}{x+1}\,dx + \int \cfrac{\frac{1}{6}(2x-1) + \frac{1}{2}}{x^2-x+1}\,dx\\
+	&= \boxed{-\dfrac{1}{3}\log|x + 1| + \dfrac{1}{6}\log(x^2-x+1)+\dfrac{1}{\sqrt{3}}\arctan\left({\dfrac{2x-1}{\sqrt{3}}}\right) + (\text{定数})}
+\end{align*}
+ただし最後は
+\begin{align*}
+\int \dfrac{1}{x^2-x+1}\,dx &=  \int \cfrac{1}{\left(x-\frac{1}{2}\right)^2+\frac{3}{4}}\,dx\\
+	&= \int \frac{1}{\frac{3}{4}\left\{\frac{4}{3}\left(x-\frac{1}{2}\right)^2 + 1\right\}}\,dx\\
+	&= \dfrac{4}{3}\int \dfrac{1}{t^2 + 1} \cdot\dfrac{\sqrt{3}}{2}\, dt\qquad \left(t = \dfrac{2}{\sqrt{3}}\left(x-\dfrac{1}{2}\right)\text{と置換}\right)\\
+	&= \dfrac{2}{\sqrt{3}} \arctan t + (\text{定数}) 
+\end{align*}
+と計算した.
+\end{kaitou}
+
+$f(x)$は$0$付近で特異点を持たず, また無限遠で$\dfrac{x}{x^3+1}\sim\dfrac{1}{x^2}$なので, 広義積分$\displaystyle{\int_0^\infty f(x)\, dx}$は収束する, というあたりをつけて計算していけばよい.
+\begin{kaitou}[(2)の解答]
+(1)より
+\begin{align*}
+\int_0^R f(x)\, dx &= \left[\dfrac{1}{6}\log\dfrac{x^2-x+1}{(x+1)^2} + \dfrac{1}{\sqrt{3}}\arctan\left({\dfrac{2x-1}{\sqrt{3}}}\right)\right]_0^R\\
+	&= \dfrac{1}{6}\log\dfrac{R^2-R+1}{(R+1)^2} + \dfrac{1}{\sqrt{3}}\left\{\arctan\left({\dfrac{2R-1}{\sqrt{3}}}\right) - \arctan\left({\dfrac{-1}{\sqrt{3}}}\right)\right\}\\
+	& \to \dfrac{1}{\sqrt{3}}\left\{\dfrac{\pi}{2} - \left(-\dfrac{\pi}{6}\right)\right\}\qquad (R \to \infty)\\
+	&=\boxed{\cfrac{2\pi}{3\sqrt{3}}}
+\end{align*}
+\end{kaitou}
+\begin{kaitou}[(3)の解答]
+極座標変換$\Phi : (r, \theta) \mapsto (x, y)$と(2)の結果から
+\begin{align*}
+\iint_D \frac{1}{(x^2+y^2)^{\frac{3}{2}}+1}\,dxdy = \int_0^{\pi/2} \int_0^\infty \dfrac{1}{r^3+1} r\, dr = \dfrac{\pi}{2}\int_0^\infty f(r)\, dr 
+	=\boxed{\dfrac{\pi^2}{3\sqrt{3}}}
+\end{align*}
+
+\end{kaitou}
+\subsection{問題4}
+\begin{problem}
+\textbf{TMU2022年度I 問題4.}\\
+関数$\sin:\left(-\frac{\pi}{2},\frac{\pi}{2}\right)\to(-1,1)$，
+$\cos:(0,\pi)\to(-1,1)$の逆関数をそれぞれ$\sin^{-1},\cos^{-1}$で表す．
+$n$を正の整数，$f(x)=\cos^{-1}x,\ g(x)=\sin^{-1}x$としたとき，以下の問いに答えよ．
+
+\begin{enumerate}[label=(\arabic*)]
+\item $(1-x^2)f''(x)-xf'(x)=0$
+を示せ．
+\item $(1-x^2)f^{(n+2)}(x)-(2n+1)xf^{(n+1)}(x)-n^2f^{(n)}(x)=0$を示せ．
+\item $f^{(n)}(0)$を求めよ．
+\item $f^{(n)}(0)+g^{(n)}(0)=0$
+を示せ．
+\end{enumerate}
+\end{problem}
+\begin{kaitou}[(1)の解]
+$\cos(f(x)) = x$より両辺微分して$-\sin(f(x))\cdot f'(x) = 1$であり, $f(x) \in (0, \pi)$から
+\[
+0 < \sin(f(x)) = \sqrt{1-\cos^2(f(x))} = \sqrt{1-x^2}
+\]
+なので
+\begin{align*}
+f'(x) & =  -\dfrac{1}{\sin(f(x))}= -\dfrac{1}{\sqrt{1-x^2}},\\
+f''(x) & = -\dfrac{x}{(1-x^2)^{\frac{3}{2}}}
+\end{align*}
+である. したがって
+\[
+(1-x^2)f''(x)-xf'(x) = (1-x^2)(-x)(1-x^2)^{-\frac{3}{2}} -x\{-(1-x^2)^{-\frac{1}{2}}\} = 0
+\]
+が成り立つ.
+\end{kaitou}
+
+\begin{kaitou}[(2)の解]
+(1)で示した等式の両辺$n$階微分を, Leibniz則を使って計算すればよい. 実際,
+\begin{align*}
+\frac{d^n}{dx^n} \{(1-x^2)f''(x)\} &= (1-x^2)f^{(n+2)}(x) + \binom{n}{1}(-2x)f^{(n+1)}(x) + \binom{n}{2}(-2)f^{(n)}(x)\\
+	&= (1-x^2)f^{(n+2)}(x) + -2nxf^{(n+1)}(x) - n(n-1)f^{(n)}(x)\\
+\frac{d^n}{dx^n} \left(xf'(x)\right) &= xf^{(n+1)}(x) + \binom{n}{1}f^{(n)}(x) \\
+	&= xf^{(n+1)}(x) + nf^{(n)}(x)
+\end{align*}
+なので
+\begin{align*}
+\frac{d^n}{dx^n} \{(1-x^2)f''(x)-xf'(x)\} = (1-x^2)f^{(n+2)}(x)-(2n+1)xf^{(n+1)}(x)-n^2f^{(n)}(x)=0
+\end{align*}
+が成り立つ.
+\end{kaitou}
+
+\begin{thm}{Leibniz則}{}
+$f(x), g(x)$を$n$階微分可能な関数として$f,g$と書くと,
+\[
+(fg)^{(n)} = f^{(n)}g + \binom{n}{1}f^{(n-1)}g' + \binom{n}{2}f^{(n-2)}g'' + \cdots + fg^{(n)}
+\]
+ここに$\displaystyle{\binom{n}{p} = \frac{n!}{p!(n-p)!}}$は組み合わせの数.
+\end{thm}
+\begin{proof}
+(略) 数学的帰納法により示せばよい.
+\end{proof}
+
+\begin{kaitou}[(3)の解]
+(2)の等式に$x=0$を代入すると
+\[
+f^{(n+2)}(0) - n^2f^{(n)}(0) = 0 \iff f^{(n+2)}(0) = n^2f^{(n)}(0)
+\]
+であり, $n$が偶数のとき$f^{(n)}(0) = 0$であることが直ちに従う. $n$が奇数のときは, 2重階乗の2乗が出てくることと$f'(0) = -1$から, $n=2m+1$とすれば$f^{(n)} = -\{(2m-1)!!\}^2$である.
+\begin{answerbox}
+\[
+f^{(n)}(0) = 
+\begin{cases}
+ 0 & \text{if $n$は偶数}\\
+ -\{(2m-1)!!\}^2 & \text{if $n$は奇数\.($n=2m+1$とおいた)}
+\end{cases}
+\]
+\end{answerbox}
+\end{kaitou}
+2重階乗はたとえばガンマ関数を扱うときなどにでてくる :
+\begin{dfn}{2重階乗}{}
+$n=0,1,2,\cdots$に対して
+\[
+n!!
+=
+\begin{cases}
+n(n-2)(n-4)\cdots 2 & \text{if $n$は偶数}\\
+n(n-2)(n-4)\cdots 1 & \text{if $n$は奇数}
+\end{cases}
+\]
+ただし$0!! = (-1)!! = 1$と約束する.
+\end{dfn}
+\begin{kaitou}[(4)の解]
+まずは$g'(x)$を, $f'(x)$と同じ手順で求める: $\sin(g(x))=x$なので, 両辺微分すれば$\cos(g(x))\cdot g'(x) = 1$. $g(x) \in (-\frac{\pi}{2}, \frac{\pi}{2})$より
+\[
+0 < \cos(g(x)) = \sqrt{1 - \sin^2(g(x))} = \sqrt{1 - x^2}
+\]
+だから
+\begin{align*}
+g'(x) &= \dfrac{1}{\cos(g(x))} = \dfrac{1}{\sqrt{1 - x^2}} = -f'(x)\\
+\end{align*}
+がわかる. したがって$g^{(n)}(x)$についても
+\[
+g^{(n+2)}(0) = n^2g^{(n)}(0)
+\]
+が成り立ち, 特に$g'(0) = 1$なので
+\[
+g^{(n)}(0) = 
+\begin{cases}
+ 0 & \text{if $n$は偶数}\\
+ \{(2m-1)!!\}^2 & \text{if $n$は奇数\.($n=2m+1$とおいた)}
+\end{cases}
+\]
+よって$f^{(n)}(0)+g^{(n)}(0)=0$が従う.
+\end{kaitou}
+\section{2022年度以前/冬期}
+\subsection{2026年度・冬季 問題1}
+\begin{problem}
+\textbf{TMU2026年度・冬期 問題1}\\
+$a$を実数とする．実数を成分にもつ$3$次正方行列$A,\ B$を
+\[
+A=
+\begin{pmatrix}
+3 & 2 & 3\\
+0 & 5 & 3\\
+0 & -2 & 0
+\end{pmatrix},
+\qquad
+B=
+\begin{pmatrix}
+4 & 0 & 3(a-1)\\
+3 & 1 & 3(a-1)\\
+-2 & 0 & -2a+3
+\end{pmatrix}
+\]
+によって定める．以下の問いに答えよ．
+
+\begin{enumerate}[label=(\arabic*)]
+    \item $A$の固有値を全て求めよ．またそれぞれの固有値に対する固有空間の基底を$1$組ずつ求めよ．
+
+    \item $P^{-1}AP,\ P^{-1}BP$がともに対角行列となる正則行列$P$が存在するような$a$の値を全て求めよ．
+
+    \item (2)で求めた$a$の値それぞれに対し，$P^{-1}AP,\ P^{-1}BP$がともに対角行列となる正則行列$P$を$1$つ求めよ．
+\end{enumerate}
+\end{problem}
+\begin{kaitou}{(1)の解}
+$A$の固有多項式$\phi(\lambda) = (\lambda-2)(\lambda-3)^2$なので, $A$の固有値は\boxed{2, 3(\text{重複度}2)}である. また\uline{$A$の$2$対する固有ベクトル}は
+\[
+A - 2E = 
+\begin{pmatrix}
+1 & 2 & 3\\
+0 & 3 & 3\\
+0 & -2 & -2  
+\end{pmatrix}
+\to 
+\begin{pmatrix}
+1 & 0 & 1\\
+0 & 1 & 1\\
+0 & 0 & 0
+\end{pmatrix}
+\]
+より
+\[
+\bm{q}_1 = 
+\begin{pmatrix}
+1\\
+1\\
+-1
+\end{pmatrix}
+\]
+として\boxed{V_2^\alpha = \langle \bm{q}_1 \rangle}である. \uline{$A$の$3$に対する固有ベクトル}は
+\[
+A - 3E =
+\begin{pmatrix}
+0 & 2 & 3\\
+0 & 2 & 3\\
+0 & -2 & -3
+\end{pmatrix}
+\to
+\begin{pmatrix}
+0 & 1 & 3/2\\
+0 & 0 & 0\\
+0 & 0 & 0
+\end{pmatrix}
+\]
+より
+\[
+\bm{q}_2 =
+\begin{pmatrix}
+1\\
+0\\
+0
+\end{pmatrix}, \qquad
+\bm{q}_3 =
+\begin{pmatrix}
+0\\
+3\\
+-2
+\end{pmatrix}
+\]
+として\boxed{V_3^\alpha = \langle \bm{q}_2,\,\bm{q}_3 \rangle}である. 
+\end{kaitou}
+\begin{kaitou}{(2)の解}
+同時対角化可能であることと可換であることは同値だったので,
+\begin{align*}
+AB = 
+\begin{pmatrix}
+3 & 2 & 3\\
+0 & 5 & 3\\
+0 & -2 & 0
+\end{pmatrix}
+\begin{pmatrix}
+4 & 0 & 3(a-1)\\
+3 & 1 & 3(a-1)\\
+-2 & 0 & -2a + 3
+\end{pmatrix}
+=
+\begin{pmatrix}
+12 & 2 & 9a - 6\\
+9 & 5 & 9a - 6\\
+-6 & -2 & -6a + 6
+\end{pmatrix},
+\\
+BA =
+\begin{pmatrix}
+4 & 0 & 3(a-1)\\
+3 & 1 & 3(a-1)\\
+-2 & 0 & -2a + 3
+\end{pmatrix}
+\begin{pmatrix}
+3 & 2 & 3\\
+0 & 5 & 3\\
+0 & -2 & 0
+\end{pmatrix}
+=
+\begin{pmatrix}
+12 & -6a+14 & 12\\
+9 & -6a + 17 & 12\\
+-6 & 4a - 10 & -6
+\end{pmatrix}
+\end{align*}
+より\boxed{a = 2}が同時対角化可能であることの必要十分条件である.
+\end{kaitou}
+\begin{dfn}{同時対角化可能}{}
+\end{dfn}
+\begin{thm}{同時対角化可能性}{}
+$A, B$が同時対角化可能である $\iff$ $A, B$は可換である (i.e. $AB = BA$)
+\end{thm}
+\begin{kaitou}{(3)の解}
+$a = 2$のとき
+\[
+B = 
+\begin{pmatrix}
+4 & 0 & 3\\
+3 & 1 & 3\\
+-2 & 0 & -1
+\end{pmatrix}
+\]
+であり, $Q = \left( \bm{q}_1\,\bm{q}_2\,\bm{q}_3 \right)$とすれば
+\begin{align}
+Q^{-1} &=
+\begin{pmatrix}
+0 & -2 & -3\\
+1 & 2 & 3\\
+0 & 1 & 1
+\end{pmatrix},\\
+Q^{-1}AQ &= 
+\begin{pmatrix}
+2 & 0 & 0\\
+0 & 3 & 0\\
+0 & 0 & 3
+\end{pmatrix}
+,\\
+Q^{-1}BQ &=
+\begin{pmatrix}
+0 & -2 & -3\\
+1 & 2 & 3\\
+0 & 1 & 1
+\end{pmatrix}
+\begin{pmatrix}
+4 & 0 & 3\\
+3 & 1 & 3\\
+-2 & 0 & -1
+\end{pmatrix}
+\begin{pmatrix}
+1 & 1 & 0\\
+1 & 0 & 3\\
+-1 & 0 & -2
+\end{pmatrix}
+=
+\left(
+\begin{array}{c|cc}
+1 & 0 & 0\\ \hline
+0 & 4 & -6\\
+0 & 1 & -1
+\end{array}
+\right)\\
+\end{align}
+である.
+\[
+B = 
+\begin{pmatrix}
+4 & -6\\
+1 & -1
+\end{pmatrix}
+\]
+として$B$を対角化すれば
+\end{kaitou}
+\subsection{2015年度数学I 問題1}
+\begin{problem}
+\textbf{TMU2015年度 問題1-(3)}\\
+$a, m\in \R$, $\delta>0$とし, $I = (a - \delta, a) \cup (a, a+\delta)$とおく. $f$を$I$上で定義された実数値関数とする. このとき次は同値になることを示せ
+\begin{enumerate}
+\item[(i)] $\displaystyle{\lim_{x \ne a, \:x \to a}}f(x) = m$
+\item[(ii)] $a_n \in I\:\:(n=1,2, \ldots)$かつ$\displaystyle{\lim_{n \to \infty}} a_n = a$を満たす全ての実数列$\{a_n\}_{n = 1}^{\infty}$に対し, $\displaystyle{\lim_{n \to \infty} f(a_n)} = m$が成り立つ.
+\end{enumerate}
+\end{problem}
+\begin{kaitou}\\
+\uline{(i)$\Rightarrow$(ii)}から示す.
+\begin{align}
+\lim_{x \to a} f(x) = m &\stackrel{\mathrm{def}}{\iff} \forall \varepsilon>0.\, \exists \xi>0.\, \forall x \in I.\, \left(|x-a|< \xi \to |f(x) - m| < \varepsilon.\right) \label{eq:tmu2015-1}\\
+\lim_{n \to \infty} a_n = a &\stackrel{\mathrm{def}}{\iff} \forall \varepsilon>0.\, \exists N\in\N.\, \forall n \ge N.\, |a_n - a| < \varepsilon.  \label{eq:tmu2015-2}
+\end{align}
+$\varepsilon > 0$を任意にとる. \eqref{eq:tmu2015-1}より, ある$\xi > 0$が存在して
+\begin{align}
+\forall x \in I.\,\left(|x - a| < \xi \to |f(x) - m| < \varepsilon \right) \label{eq:tmu2015-3}
+\end{align}
+が成り立つ. \eqref{eq:tmu2015-2}より (つまり$\varepsilon = \xi$とすることで), ある$N \in \N$が存在して
+\begin{align*}
+\forall n \ge N.\, |a_n - a| < \xi
+\end{align*}
+が成り立つので, \eqref{eq:tmu2015-3}と合わせて
+\[
+\forall n \ge N.\, |f(a_n) - m| < \varepsilon
+\]
+であり, これは(ii)が成り立つことに他ならない.
+
+次に\uline{(ii)$\Rightarrow$(i)}を示す. これは対偶を示そう. 
+\begin{align}
+\lim_{x \to a} f(x) \ne m \iff \exists \varepsilon > 0.\,\forall \xi > 0.\, \exists x \in I.\,\left(|x - a| < \xi\,\,\text{かつ}\,\,|f(x) - m| \ge \varepsilon \right) \label{eq:tmu2015-4}
+\end{align}
+を仮定し, \eqref{eq:tmu2015-4}を満たすような$\varepsilon$をとる. 各$n \in \N$に対し ($\xi = \frac{1}{n}$とすることで) ある$x_n$が存在して,
+\[
+|x_n - a|  < \frac{1}{n}\,\,\text{かつ}\,\,|f(x_n) - m| \ge \varepsilon
+\]
+が成り立つ. このように定めた$\{x_n\}_{n = 1}^\infty$は$\{x_n\}_{n = 1}^\infty \subset I$かつ$\displaystyle{\lim_{n \to \infty} x_n} = a$だが, $\lim_{n \to \infty} f(x_n) \ne m$である. よって(i)の否定が示せたので, 結論が従う.
+\end{kaitou}
+\begin{marker}
+(ii)$\Rightarrow$(i)は, (ii)が複雑なのでそのまま示すのは難しい. 対偶をとることで単純な(i)の否定を前提に議論を進めることができる. (ii)は(記法としてインフォーマルだが)
+\[
+\forall \{a_n\}_{n =1}^\infty \subset I.\,\left(\lim_{n \to \infty} a_n = a \to \lim_{n \to \infty} f(a_n) = m \right) 
+\]
+なので, その否定は
+\[
+\exists \{a_n\}_{n =1}^\infty \subset I.\,\left(\lim_{n \to \infty} a_n = a\,\,\text{かつ}\,\, \lim_{n \to \infty} f(a_n) = m\right)
+\]
+である.
+\end{marker}
+\begin{marker}
+「$P$ならば$Q$」の否定は「$P$かつ$Q$でない」である. これは「$P$ならば$Q$」の真理値表が
+\[
+\begin{array}{c|c|c}
+P & Q & P \text{ならば} Q \\ \hline
+\mathrm{T} & \mathrm{T} & \mathrm{T} \\
+\mathrm{T} & \mathrm{F} & \mathrm{F} \\
+\mathrm{F} & \mathrm{T} & \mathrm{T} \\
+\mathrm{F} & \mathrm{F} & \mathrm{T}
+\end{array}
+\]
+と定めたことと, 否定命題は元の命題が偽になる行で真になることから, 2行目のみ真となることから思い出せる.
+\end{marker}
+\begin{marker}
+「$P$ならば$Q$」, 「$P$かつ$Q$でない」の命題論理における正確な記法はそれぞれ
+\[
+P \to Q,\qquad P \land \neg Q
+\]
+だが, 数理論理学以外では
+\[
+P \Rightarrow Q, \qquad P\,\,\text{かつ}\,\,\text{not}\,Q\quad(\text{あるいは} P\,\&\,\text{not}\,Q)
+\]
+と書くことが多いだろう. 
+\end{marker}
+上の主張は一般に「点列による連続性の特徴づけ」と呼ばれる. 用語を整理しておこう. 
+\begin{dfn}{点列連続}{}
+$X, Y$を位相空間, $f : X \to Y$を写像とし, $a \in X$とする. $a$に収束する任意の点列$\{a_n\}_{n=1}^{\infty} \subset X$に対し, $\{f(a_n)\}_{n =1}^\infty \subset Y$が$f(a)$に収束するとき, $f$は$a$で\textbf{点列連続である}という.
+\end{dfn}
+距離空間では「連続$\Leftrightarrow$点列連続」が成り立つが, 一般の位相空間では上の問で(ii)$\Rightarrow$(i)に対応する「連続$\Rightarrow$点列連続」は成り立つとは限らない. $X$が第一可算公理を満たすときは成り立つのであった(これも証明は対偶を考える).
+
+\subsection{2020年度数学I 問題4}
+\begin{problem}
+\textbf{問題4-(4)}\\
+自然数全体を定義域とする実数値関数$f$に対し, 数列$\{a_n\}_{n = 1}^\infty$を
+\[
+\sum_{i = 1}^n\sum_{j = 0}^{n - i} f(i + j)
+\]
+で定義する. \\
+$|x| < 1$の範囲で$\frac{1}{1 + x ^2}$をマクローリン展開 (i.e. $x = 0$でのテイラー展開) せよ. またそれを利用して
+\[
+f(k) = \frac{(-1)^{k-1}}{k(2k - 1)}
+\]
+のときの$\displaystyle{\lim_{n \to \infty} a_n}$を求めよ.
+\end{problem}
+\begin{kaitou}
+$|r| < 1$のとき
+\[
+\sum_{k=0}^\infty r^k = \dfrac{1}{1 - r}
+\]
+であり, $|x| < 1$のとき$|x^2| < 1$だから
+\begin{align}
+\dfrac{1}{x^2 + 1} = \dfrac{1}{1 - (-x^2)} = \sum_{k = 0}^\infty (-x^2)^k =  \boxed{\sum_{k = 0}^\infty (-1)^k x^{2k}} \label{eq:taylor}
+\end{align}
+さて, この結果を利用して$\displaystyle{\lim_{n \to \infty} a_n}$を求めよう. $a_n - a_{n-1} = nf(n)\quad(n \ge 2)$なので
+\[
+a_n = a_1 + \sum_{k= 2}^n kf(k) = f(1) + \sum_{k= 2}^n kf(k) = \sum_{k = 1}^n kf(k) = \sum_{k = 1}^n \dfrac{(-1)^{k-1}}{2k - 1}
+\]
+である. したがって
+\[
+\lim_{n \to \infty} a_n = \sum_{k = 1}^\infty \dfrac{(-1)^{k-1}}{2k - 1} = \sum_{k = 0}^\infty \dfrac{(-1)^k}{2k+1} 
+\]
+を求めればよい. \eqref{eq:taylor}は$[0, r] \subset (-1, 1)$上一様収束するから, 項別積分定理より
+\begin{align*}
+\int_0^r \dfrac{1}{1 + x^2}\,dx = \int_0^r \left\{\sum_{k = 0}^\infty (-1)^k x^{2k}\right\}\,dx  & = \lim_{n \to \infty} \int_0^r \sum_{k = 0}^n (-1)^k x^{2k}\,dx\\
+& = \sum_{k = 0}^\infty \dfrac{(-1)^k}{2k + 1}r^{2k + 1}
+\end{align*}
+すなわち
+\begin{align}
+\int_0^r \dfrac{1}{1 + x^2}\,dx = \sum_{k = 0}^\infty \dfrac{(-1)^k}{2k + 1}r^{2k + 1} \label{eq:goal}
+\end{align}
+が成り立つ. ここで\eqref{eq:goal}の右辺の収束半径は$1$だが, $b_k = \frac{1}{2k + 1}$とおけば$\{b_k\}_{k = 0}^\infty$は各項が正の単調減少列なので, 交代級数$\displaystyle{\sum_{k = 0} ^\infty(-1)^kb_k}$は収束する. これは\eqref{eq:goal}の右辺が$r = 1$でも収束することを意味する. したがってAbelの第2定理から
+\begin{align*}
+\int_0^1 \dfrac{1}{1 + x^2}\,dx = \sum_{k = 0}^\infty \dfrac{(-1)^k}{2k + 1}
+\end{align*}
+なので, 
+\[
+\lim_{n \to \infty} a_n = \sum_{k = 0}^\infty \dfrac{(-1)^k}{2k + 1} = \arctan 1 = \boxed{\frac{\pi}{4}}
+\]
+がわかる.
+\end{kaitou}
+今回は不要だが, 部分分数分解を使ってマクローリン展開することもある.
+\begin{kaitou}{別解}
+$\frac{1}{1 + x^2}$を部分分数分解する :
+\[
+\dfrac{1}{1 + x^2} = \dfrac{\frac{i}{2}}{i + x} + \dfrac{-\frac{i}{2}}{-i + x}
+\]
+\begin{align*}
+\dfrac{\frac{i}{2}}{i + x} &= \dfrac{1}{2} \cdot \dfrac{1}{1 + \frac{x}{i}} = \dfrac{1}{2}\sum_{k = 0}^\infty \left(-\dfrac{x}{i}\right)^k = \dfrac{1}{2}\sum_{k=0}^\infty i^kx^k\\
+\dfrac{-\frac{i}{2}}{-i + x} &= \dfrac{1}{2} \cdot \dfrac{1}{1 - \frac{x}{i}} = \dfrac{1}{2}\sum_{k = 0}^\infty \left(\dfrac{x}{i}\right)^k = \dfrac{1}{2}\sum_{k=0}^\infty (-i)^kx^k
+\end{align*}
+となるので,
+\begin{align}
+\dfrac{1}{x^2 + 1} = \dfrac{1}{2}\sum_{k=0}^\infty\left\{i^k + (-i)^k  \right\}x^k =  \boxed{\sum_{k = 0}^\infty (-1)^k x^{2k}} 
+\end{align}
+である. ここに
+\[
+\dfrac{1}{2}\left\{i^k + (-i)^k  \right\} = 
+\begin{cases}
+0 & \text{if}\,\,k\text{は奇数}\\
+(-1)^{\frac{k}{2}} & \text{if}\,\,k\text{は偶数}
+\end{cases}
+\]
+であることを加味した.
+\end{kaitou}
+\section{Appendix}
+\subsection{お茶女}
+\subsection{名古屋大}
+\begin{thebibliography}{99}
+\bibitem{Karel1}
+Karel Svadlenka (2025). 『解析学A : 講義ノート』
+\bibitem{Karel2}
+Karel Svadlenka (2026). 『解析学特別講義I : 講義ノート』
+\bibitem{tsaitou}
+齋藤毅 (2007). 『線形代数の世界』東京大学出版会.
+\bibitem{msaitou}
+齋藤正彦 (1966). 『線型代数入門』東京大学出版会.
+\bibitem{suzuki}
+鈴木登志雄 (2016). 『例題で学ぶ集合と論理』森北出版.
+\bibitem{takagi}
+高木貞治 (2010).『定本 解析概論』岩波書店.
+\bibitem{namba}
+難波誠 (1996). 『微分積分学』裳華房.
+\bibitem{matusaka}
+松坂和夫 (1968). 『集合・位相入門』岩波書店.
+\bibitem{yoshida}
+吉田伸生 (2021). 『新装版 ルベーグ積分入門 使うための理論と演習』日本評論社.
+\bibitem{fuji1}
+藤岡敦 (2021). 『手を動かしてまなぶ$\varepsilon-\delta$論法』裳華房.
+\bibitem{fuji2}
+藤岡敦 (2021). 『手を動かしてまなぶ続・線形代数』裳華房.
+\bibitem{keshiki}
+\href{https://mathlandscape.com/}{数学の景色}
+\bibitem{ryu}
+\href{https://www.youtube.com/@ron1827}{龍孫江の数学日誌 in YouTube} 
+\end{thebibliography}
+\end{document}
