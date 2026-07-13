@@ -36,28 +36,29 @@
 \newcommand{\rank}{\operatorname{rank}}
 \newcommand{\defiff}{\stackrel{\mathrm{def}}{\iff}}
 
-\definecolor{sectioncolor}{RGB}{67,102,176}
+\definecolor{tmublue1}{RGB}{67,102,176}
+\definecolor{tmublue2}{RGB}{109,151,207}
 
 \titleformat{\section}
-  {\Large\bfseries\color{sectioncolor}}
+  {\Large\bfseries\color{tmublue2}}
   {}
   {0pt}
   {\underline{\thesection\hspace{0.7em}#1}}
 
-\titleformat{name=\section,numberless}
-  {\Large\bfseries\color{sectioncolor}}
+\titleformat{name=\section}
+  {\Large\bfseries\color{tmublue2}}
   {}
   {0pt}
   {\underline{#1}}
 
 \titleformat{\subsection}
-  {\large\bfseries\color{sectioncolor}}
+  {\large\bfseries\color{tmublue2}}
   {}
   {0pt}
   {\underline{\thesubsection\hspace{0.7em}#1}}
 
 \titleformat{name=\subsection,numberless}
-  {\large\bfseries\color{sectioncolor}}
+  {\large\bfseries\color{tmublue2}}
   {}
   {0pt}
   {\underline{#1}}
@@ -222,24 +223,26 @@ bottom=1mm
  bookmarksdepth=tocdepth,%
  bookmarksnumbered=true,%
  colorlinks=true,%
- linkcolor=magenta,
+ linkcolor=tmublue1,
  pdftitle={},%
  pdfsubject={},%
  pdfauthor={},%
  pdfkeywords={}}
 
 
-\title{都立大数理 院試解答メモ}
-\author{Riku Araki}
+\title{都立大数理 院試解答ノート}
+\author{荒木理求}
 \date \today
 
 \begin{document}
 \maketitle
-\setcounter{section}{-1}
-\refstepcounter{section}
-\section*{\thesection\hspace{0.7em}前書き}
+\setcounter{section}{0}
+\setcounter{subsection}{0}
+\section*{0\hspace{0.7em}前書き}
+\refstepcounter{subsection}
 \subsection*{\thesubsection\hspace{0.7em}謝辞}
-共に勉強してくれた友人および先輩, 特に齋藤剣生くん, 杉崎弥寿くん, 杉江愛菜さん, 望月梨華さんに感謝します. 
+共に勉強してくれた友人および先輩, 特にK.S.くん, M.S.くん, A.S.さん, R.M.さんに感謝します. 
+\refstepcounter{subsection}
 \subsection*{\thesubsection\hspace{0.7em}記号}
 \begin{problem}
 \textbf{問題.}\quad 問題文は適宜省略していますが, 本質的な改変はしていません.
@@ -251,9 +254,7 @@ bottom=1mm
 \end{dfn}
 \begin{thm}{}{}
 \end{thm}
-\begin{proof}
-\end{proof}
-\begin{ex}{例:}
+\begin{ex}{例}
 \end{ex}
 \begin{marker}
 注意書き及び考察
@@ -1468,7 +1469,7 @@ f(x) =
 と計算できる.
 \end{ex}
 先に述べたFubiniの定理\ref{thm:tmu2026-4k}も, Lebesgue積分を用いることで, 緩やかな仮定のもとで累次積分が許されることが知られている.
-\begin{thm}{Fubini-Tonelliの定理}{}
+\begin{thm}{Fubini-Tonelliの定理}{Fubini}
 $f : \R^2 \to \R$をLebesgue可測とする. このとき以下が成り立つ\footnote{(a)は各辺が$\infty$の場合も含め成立する} :
 \begin{enumerate}[label = (\alph*)]
 \item 
@@ -1491,6 +1492,729 @@ f(x, y) & \text{if}\,\,(x, y) \in D\\
 \end{cases}
 \]
 とすれば直ちに従う. Fubini-Tonelliの定理は定義域を$\R^d$としても同様に成り立ち, さらに$\R^d$に限らず, 一般の$\sigma$-有限測度空間の直積上でも順序交換が許される.
+\section{2025年度}
+\subsection{問題1}
+\begin{problem}
+\textbf{TMU2025年度I 問題1.}\\
+$c_1, c_2$ を実数とし，ベクトル $\bm{a_1},\bm{a_2},\bm{a_3},\bm{b}\in\mathbb{R}^4$ を
+\[
+\bm{a}_1=
+\begin{pmatrix}
+2\\
+1\\
+1\\
+1
+\end{pmatrix},
+\quad
+\bm{a}_2=
+\begin{pmatrix}
+1\\
+2\\
+1\\
+1
+\end{pmatrix},
+\quad
+\bm{a}_3=
+\begin{pmatrix}
+1\\
+1\\
+2\\
+1
+\end{pmatrix},
+\quad
+\bm{b}=
+\begin{pmatrix}
+c_1\\
+1\\
+1\\
+c_2
+\end{pmatrix}
+\]
+と定める．以下の問いに答えよ．
+
+\begin{enumerate}[label=(\arabic*)]
+  \item $4$ 次正方行列 $(\bm{a}_1 \,\, \bm{a}_2 \,\, \bm{a}_3 \,\, \bm{b})$ の行列式を求めよ．
+
+  \item $4\times 3$ 行列 $(\bm{a}_1 \,\, \bm{a}_2 \,\, \bm{a}_3)$ を $A$ とおき，$c_1=6$ とする．
+  $A\bm{x}=\bm{b}$ を満たす $\bm{x}\in\mathbb{R}^3$ が存在するとき，$c_2$ の値と $\bm{x}$ を求めよ．
+
+  \item $(2)$ の $c_1,c_2$ に対し，$\bm{a}_1,\bm{a}_2$ で張られる空間を $V_1$ とし, $\bm{a}_3,\bm{b}$ で張られる空間を $V_2$ とする．
+  このとき $V_1\cap V_2$ の次元と基底を求めよ．
+\end{enumerate}
+\end{problem}
+\begin{kaitou}[(1)の解]
+\begin{align*}
+\det(\bm{a}_1 \,\, \bm{a}_2 \,\, \bm{a}_3 \,\, \bm{b}) = 
+\begin{vmatrix}
+2 & 1 & 1 & c_1\\
+1 & 2 & 1 & 1\\
+1 & 1 & 2 & 1\\
+1 & 1 & 1 & c_2
+\end{vmatrix}
+&=
+\begin{vmatrix}
+0 & -3 & -1 & c_1 - 2\\
+1 & 2 & 1 & 1\\
+0 & -1 & 1 & 0\\
+0 & -1 & 0 & c_2 - 1
+\end{vmatrix}\\
+&=
+-
+\begin{vmatrix}
+-3 & -1 & c_1 - 2\\
+-1 & 1 & 0\\
+-1 & 0 & c_2 - 1
+\end{vmatrix}
+&&(\text{1列目で余因子展開})\\
+&= \boxed{4c_2 - c_1 - 2}&&(\text{Sarrus}の方法)
+\end{align*}
+\end{kaitou}
+(2)も計算で, 拡大係数行列を行基本変形すればよい.
+\begin{kaitou}[(2)の解]
+\[
+\left(
+\begin{array}{ccc|c}
+2 & 1 & 1 & c_1\\
+1 & 2 & 1 & 1\\
+1 & 1 & 2 & 1\\
+1 & 1 & 1 & c_2
+\end{array}
+\right)
+\stackrel{\text{行基本変形}}{\sim}
+\left(
+\begin{array}{ccc|c}
+1 & 0 & 0 & 4\\
+0 & 1 & 0 & -1\\
+0 & 0 & 1 & -1\\
+0 & 0 & 0 & -c_2 +2
+\end{array}
+\right)
+\]
+であり, 「$A\bm{x} = \bm{b}$が解をもつ $\iff$ 係数行列$A$と拡大係数行列$(A\,|\, \bm{b})$の$\mathrm{rank}$が一致する」 だったから, $-c_2 + 2 = 0$ すなわち $c_2 = \boxed{2}$\,,\,\,$\bm{x} = \boxed{{}^t(4, -1, -1)}$である.
+\end{kaitou}
+(2)の$c_2$は拡大係数行列の$\mathrm{rank}$の条件から求める必要がある一方で, その行基本変形によって$\bm{a}_1, \bm{a}_2, \bm{a}_3$が一次独立とわかるので, その状況下で
+\[
+\exists \bm{x} \in \R^3 : A\bm{x}=\bm{b} \iff \det(\bm{a}_1\,\,\bm{a}_2\,\,\bm{a}_3\,\,\bm{b}) = 0
+\]
+が成り立つことから, (1)を使って検算できる. 実際$4\cdot 2 - 6 - 2 = 0$なので, 上の計算
+は正しかったことがわかる.
+
+(3)は(2)が誘導になっており, 計算はほとんどしなくて済む.
+\begin{kaitou}[(3)の解]
+\textbf{部分空間に対する次元定理}より
+\[
+\dim{(V_1 + V_2)} = \dim V_1 + \dim V_2 - \dim (V_1 \cap V_2)
+\]
+だった. また, $\dim V_1 = \dim V_2 = 2$かつ(2)の行基本変形より
+\[
+V_1 + V_2 = \langle \bm{a}_1, \bm{a}_2, \bm{a}_3, \bm{b} \rangle = \langle \bm{a}_1, \bm{a}_2, \bm{a}_3 \rangle
+\]
+だから$\dim(V_1 + V_2) = 3$である. したがって
+\[
+\dim (V_1 \cap V_2) = 2 + 2 - 3 = \boxed{1}
+\]
+とわかる. また, (2)より$\bm{b} = 4\bm{a}_1-\bm{a}_2-\bm{a}_3$なので
+\[
+V_1 \ni 4\bm{a}_1 - \bm{a}_2 = \bm{b} + \bm{a}_3 \in V_2
+\]
+すなわち
+\[
+4
+\begin{pmatrix}
+2\\
+1\\
+1\\
+1
+\end{pmatrix}
+-
+\begin{pmatrix}
+1\\
+2\\
+1\\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+7\\
+2\\
+3\\
+3
+\end{pmatrix}
+\in V_1 \cap V_2
+\]
+であり, $V_1 \cap V_2$の基底として$\boxed{
+\left\{
+\begin{pmatrix}
+7\\
+2\\
+3\\
+3
+\end{pmatrix}
+\right\}
+}$がとれる.
+\end{kaitou}
+上のように和空間$V_1 + V_2$の次元を求めさせてから$V_1 \cap V_2$の次元を問う問題は多い. (2)のような直接的な誘導がなければ, 行列$(\bm{a}_1\,\,\bm{a}_2\,\,\bm{a}_3\,\,\bm{b})$の解空間を調べることになる.  
+\begin{thm}{(部分空間に対する) 次元定理}{}
+$W$を$\C$上の有限次元ベクトル空間, $V_1, V_2 \subset W$を部分空間とする. このとき次が成り立つ : 
+\[
+\dim(V_1 + V_2) = \dim V_1 + \dim V_2 - \dim\left(V_1 \cap V_2\right)
+\]
+\end{thm}
+\begin{proof}
+(方針) まず$V_1 \cap V_2$の基底を選び, $V_1$の基底となるように延長する. $V_2$についても同様に, $V_1 \cap V_2$の基底の延長となるように基底を選ぶ. あとはそれらが一次独立であることを示せばよい.
+\end{proof}
+\subsection{問題2}
+\begin{problem}
+\textbf{TMU2025年度I 問題2.}\\
+行列$A$とベクトル$\bm{v}_1,\bm{v}_2$を次のように定める．
+\[
+A=
+\begin{pmatrix}
+4 & -2 & -4 & -2\\
+2 & -1 & -2 & -1\\
+0 & -1 & 2 & 1\\
+2 & 0 & -4 & -2
+\end{pmatrix},
+\qquad
+\bm{v}_1=
+\begin{pmatrix}
+2\\
+1\\
+1\\
+0
+\end{pmatrix},
+\qquad
+\bm{v}_2=
+\begin{pmatrix}
+0\\
+0\\
+-1\\
+1
+\end{pmatrix}.
+\]
+線形写像$f:\R^4\to\R^4$を，$\bm{x}\in\R^4$に対し$f(\bm{x})=A\bm{x}$で定める．また$\bm{v}_1,\bm{v}_2$で張られる空間を$V$とする．以下の問いに答えよ．
+
+\begin{enumerate}[label=(\arabic*)]
+    \item $f$の核$\Ker f$の次元を求めよ．
+    
+    \item $f$による$V$の像$f(V)$は$V$に含まれることを示せ．
+    
+    \item 線形写像$g:V\to V$を，$\bm{x}\in V$に対し$g(\bm{x})=A\bm{x}$で定める．
+    $\bm{w}_1=\bm{v}_1,\ \bm{w}_2=\bm{v}_1+\bm{v}_2$とおく．
+    $V$の基底$\bm{w}_1,\bm{w}_2$に関する$g$の表現行列$B$を求めよ．
+    
+    \item $A$は対角化可能であるか判定し，対角化可能なら
+    $P^{-1}AP$が対角行列になるような正則行列$P$とそのときの$P^{-1}AP$を求めよ．
+\end{enumerate}
+\end{problem}
+\begin{kaitou}[(1)の解]
+\begin{align}
+A=
+\begin{pmatrix}
+4 & -2 & -4 & -2\\
+2 & -1 & -2 & -1\\
+0 & -1 & 2 & 1\\
+2 & 0 & -4 & -2
+\end{pmatrix}
+\stackrel{\text{行基本変形}}{\sim}
+\begin{pmatrix}
+1 & 0 & -2 & -1\\
+0 & 1 & -2 & -1\\
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0
+\end{pmatrix} \label{tmu2025-2d}
+\end{align}
+より$\rank A = 2$だから, $\dim(\Ker f) = 4 - \dim(\Im f) = 4 - 2 = \boxed{2}$\,.
+\end{kaitou}
+\begin{kaitou}[(2)の解]
+$V = \langle \bm{v}_1, \bm{v}_2 \rangle$なので, $V$の任意の元$\bm{v}$はある$\lambda, \mu \in \R$によって$\bm{v} = \lambda\bm{v}_1 + \mu\bm{v}_2$とかける. $f(\bm{v}) = f(\lambda\bm{v}_1 + \mu \bm{v}_2) = \lambda f(\bm{v}_1) + \mu f(\bm{v}_2)$だから, $f(V) \subset V$を示すには$f(\bm{v}_1), f(\bm{v}_2) \in V$をいえばよい. 実際, 
+\begin{align}
+f(\bm{v}_1) &= A\bm{v}_1 =
+\begin{pmatrix}
+2\\
+1\\
+1\\
+0
+\end{pmatrix}
+= \bm{v}_1, \label{tmu2025-2a} \\
+f(\bm{v}_2) &= A\bm{v}_2 = 
+\begin{pmatrix}
+2\\
+1\\
+-1\\
+2
+\end{pmatrix}
+= \bm{v}_1 + \bm{v}_2 \label{tmu2025-2b} 
+\end{align}
+が成り立つ.
+\end{kaitou}
+(2)は「$V \subset \R^4$は$f$-不変部分空間である」ことを示す問題である. Jordan標準形の存在を示すときや同時対角化の必要十分条件を与えるときに重要なので, 定義を確認しておこう : 
+\begin{dfn}{不変部分空間}{}
+$V$をベクトル空間, $W \subset V$を部分空間とする. 線形変換$f : V \to V$について$f(W) \subset W$が成り立つとき, $W$は$f$-\textbf{不変部分空間}であるという.
+\end{dfn}
+\begin{ex}{例: 不変部分空間の例}
+不変部分空間は固有空間が持つ性質を一般化した概念であり, $V$を$\C$上のベクトル空間, $f : V \to V$を線形変換とすれば, $\Im f, \Ker f \subset V$は$f$-不変部分空間である. 実際, 
+\begin{itemize}
+\item $f(\bm{0}) = \bm{0}$より$\bm{0} \in \Im f$
+\item $\bm{x}, \bm{y} \in \Im f$,$\lambda \in \C$を任意にとれば, $f(\bm{x}') = \bm{x},\, f(\bm{y}') = \bm{y}$となるような$\bm{x}', \bm{y}' \in V$が存在するから
+\[
+\bm{x} + \lambda\bm{y} = f(\bm{x}') + \lambda f(\bm{y}') = f(\bm{x}' + \lambda\bm{y}') \in \Im f
+\]
+\end{itemize}
+が成り立つ.
+\end{ex}
+(2)から線形変換$g : V \to V ; \bm{x} \mapsto A\bm{x}$が定義できる.
+\begin{kaitou}[(3)の解]
+$g = f|_V$であり, \eqref{tmu2025-2a}, \eqref{tmu2025-2b}より
+\begin{align}
+\left( g(\bm{w}_1)\,\,g(\bm{w}_2)\right) = \left(f(\bm{v}_1)\,\,f(\bm{v}_1 + \bm{v}_2)\right) &= (\bm{v}_1\,\,2(\bm{v}_1 + \bm{v}_2)) \notag \\ 
+&= (\bm{w}_1\,\,\bm{w}_2) \notag \\
+&= (\bm{w}_1\,\,\bm{w}_2) \label{tmu2025-2c}
+\begin{pmatrix}
+1 & 0\\
+0 & 2
+\end{pmatrix}
+\end{align}
+だから, $B = \boxed{\begin{pmatrix}
+1 & 0\\
+0 & 2
+\end{pmatrix}}
+$
+である.
+\end{kaitou}
+(4)は(3)までが誘導になっており, $A$の固有多項式を計算する必要はない. (1)から$\dim(\Ker f) = 2$, すなわち$A$の固有値$0$に対する固有空間の次元が$2$である. また(2)より, $f$の定義域を$V$に制限したときの$\{\bm{w}_1, \bm{w}_2\}$に関する表現行列$B$は対角行列になるので, $\bm{w}_2, \bm{w}_2$は$A$の固有ベクトルに他ならない. 以下, $A$の固有値$\alpha$に対する固有空間を$V_\alpha$とかく.
+\begin{kaitou}[(4)の解]
+(1), (3)より$A$の固有値は$0, 1, 2$であり,
+\[
+\dim V_0 + \dim V_1 + \dim V_2 = 4 = \dim \R^4
+\]
+が成り立つから\footnote{$\R^4 = V_0 \oplus V_1 \oplus V_2$と固有空間分解できるということ.}, \boxed{$A$は対角化可能}\,である.
+このとき\eqref{tmu2025-2d}, \eqref{tmu2025-2c}より
+\begin{align*}
+V_0 = 
+\left\langle
+\begin{pmatrix}
+2\\
+2\\
+1\\
+0
+\end{pmatrix}
+,
+\begin{pmatrix}
+1\\
+1\\
+0\\
+1
+\end{pmatrix}
+\right\rangle
+,\qquad
+V_1 = \langle \bm{w}_1\rangle,
+\qquad
+V_2 = \langle \bm{w}_2 \rangle
+\end{align*}
+なので, これらを列に並べた$P$を考えればよい. 
+\begin{answerbox}
+\[
+P = 
+\begin{pmatrix}
+2 & 1 & 2 & 2\\
+2 & 1 & 1 & 1\\
+1 & 0 & 1 & 0\\
+0 & 1 & 0 & 1
+\end{pmatrix}
+,\qquad
+P^{-1}AP = 
+\begin{pmatrix}
+0 & 0 & 0 & 0\\
+0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 0& 0 & 2
+\end{pmatrix}
+\]
+\end{answerbox}
+\end{kaitou}
+\subsection{問題3}
+\begin{problem}
+\textbf{TMU2025年度I 問題3.}\\
+$\R^2$上の関数
+\[
+f(x, y) = (2x^2+y^2)e^{-x^2-y^2}
+\]
+について, 以下の問いに答えよ.
+\begin{enumerate}[label=(\arabic*)]
+\item $f$の極値を求めよ.
+\item $f$の最大値が存在することを示し, 最大値を求めよ.
+\item 次の広義積分の値を求めよ.
+\[
+\iint_{\R^2} f(x, y)\,dx dy
+\]
+\end{enumerate}
+\end{problem}
+\begin{kaitou}[(1)の解]
+\begin{align*}
+f_x(x, y) &= 2x(2 - 2x^2 - y^2)e^{-x^2 - y^2},\\
+f_y(x, y) &= 2y(1 - 2x^2 - y^2)e^{-x^2 - y^2}
+\end{align*}
+より
+\begin{align}
+(x, y)\text{は$f$の停留点} &\iff (x = 0 \lor 2x^2 + y^2 = 2) \land (y = 0 \lor 2x^2 + y^2 = 1)\notag \\               
+& \iff (x, y) = (0, 0), (0, \pm1), (\pm 1, 0) \label{tmu2025-3a}
+\end{align}
+である. さらに計算を頑張ると
+\begin{align*}
+f_{xx}(x, y) &= 2(4x^4 - 2x^2y^2 - 10x^2 - y^2 + 2)e^{-x^2 - y^2},\\
+f_{xy}(x, y) &= f_{yx}(x, y) = -4xy(3 - 2x^2 - y^2)e^{-x^2 - y^2},\\
+f_{yy}(x, y) &= 2(2y^4 + 4x^2y^2 - 2x^2 - 5y^2 + 1)e^{-x^2 - y^2}
+\end{align*}
+だから, \eqref{tmu2025-3a}の各点における\textit{Hessian} $H_f$は
+\begin{align}
+&H_f(0, 0) =
+\begin{vmatrix}
+4 & 0\\
+0 & 2
+\end{vmatrix} 
+= 8 > 0 \label{tmu2025-3b}\\
+&H_f(0, \pm 1) = 
+\begin{vmatrix}
+\frac{2}{e} & 0\\
+0 & -\frac{4}{e}
+\end{vmatrix}
+= -\frac{8}{e^2} < 0 \\
+&H_f(\pm1, 0) = 
+\begin{vmatrix}
+-\frac{8}{e} & 0\\
+0 & -\frac{2}{e}
+\end{vmatrix}
+= \frac{16}{e^2} > 0 \label{tmu2025-3c}
+\end{align}
+である. したがって$f$は$(0, 0), (\pm 1, 0)$で極値をとり, $\left((0, \pm 1), f(0, \pm 1)\right)$は鞍点となる. とくに\eqref{tmu2025-3b}で$f_{xx}(0, 0) = 4 > 0$, \eqref{tmu2025-3c}で$f_{xx}(\pm1, 0) = -\frac{8}{e} < 0$だから
+\begin{answerbox}
+\[
+f(0, 0) = 0\text{が極小値},\qquad f(\pm1, 0) = \frac{2}{e}\text{が極大値}
+\]
+\end{answerbox}
+だとわかる.
+\end{kaitou}
+2階偏導関数の計算では次の事実を用いるのがよい :
+\begin{thm}{偏微分の順序交換}{}
+$D \subset \R^2$領域とする. $f : D \to \R^2$が$C^2$級ならば
+\[
+f_{xy}(x, y) = f_{yx}(x, y)
+\]
+が成り立つ.
+\end{thm}
+極値は\textit{Hessian}を用いて判定するのであった. 重要な事実をまとめておこう.
+\begin{lem}{極値をとる必要条件}{}
+$C^1$級関数$f(x, y)$が点$(a, b)$で極値をとるならば
+\[
+f_x(a,b) = f_y(a, b) = 0
+\]
+を満たす. このような点$(a, b)$を\textbf{停留点} (stationary point) とよぶ. 
+\end{lem}
+\begin{proof}
+$f_x(a,b) > 0$とすると, $f_x$の連続性より$(a,b)$の近傍で$f_x(x, y)>0$が成り立つ. ゆえに$x =a$のまわりで$f(x, b)$は単調増加するので, $(a,b)$で極値を取ることに矛盾する. $f_x(a,b) < 0$としても矛盾するので, $f_x(a,b) = 0$がわかる. $f_y (a, b)$についても同様.
+\end{proof}
+\begin{dfn}{定義2. (Hessian, ヘッセ行列)}{}
+$n$変数関数$f(x_1, \cdots, x_n)$を$C^2$級関数に対し, $n$次対称行列
+\[
+\begin{pmatrix}
+\dfrac{\partial^2 f}{\partial x_i \partial x_j}
+\end{pmatrix}
+_{ij}
+\]
+を\textbf{ヘッセ行列}(\textit{Hessian})といい, $H_f$とかく.
+\end{dfn}
+例えば$n=2$のときの\textit{Hessian}は
+\[
+\begin{pmatrix}
+f_{xx} & f_{xy}\\
+f_{yx} & f_{yy}
+\end{pmatrix}
+\]
+である. 
+\begin{thm}{極値の判定}{tmu2025-a}
+$C^2$級関数$f(x, y)$が$f_x(a,b) = f_y(a,b) = 0$を満たすとする. このとき
+\begin{enumerate}
+\item[(1)] $|H_f (a, b)| > 0$かつ$f_{xx} > 0$ならば$(a, b)$で極小,
+\item[(2)] $|H_f (a, b)| > 0$ かつ$f_{xx}< 0$ならば$(a, b)$で極大,
+\item[(3)] $|H_f (a, b)| < 0$ならば$(a ,b)$で極値をとらず, 鞍点 (i.e. $\left((a, b), f(a,b)\right)$がグラフの峠の点)  
+\end{enumerate} 
+となる. ここで$H_f(a, b) = 0$となる場合については判定できない.
+\end{thm}
+\begin{proof}
+(方針) 2変数のTaylorの定理を用いて, 場合分けを頑張る.
+\end{proof}
+今回は2変数なのでこの定理で事足りるが, 実は (より煩雑だが) 本質的には同じ証明で$n$変数関数の場合に一般化される.
+\begin{thm}{$n$変数関数の極値の判定}{tmu2025-b}
+$C^2$級関数$f(x_1, \cdots, x_n)$が点$P$で
+\[
+\dfrac{\partial f}{\partial x_1}(P) = \cdots = \dfrac{\partial f}{\partial x_n}(P) = 0
+\]
+を満たすとする. このとき$H_f(P)$の固有値が
+\begin{enumerate}
+\item[(1)] すべて正ならば$P$で極小,
+\item[(2)] すべて負なららば$P$で極大,
+\item[(3)] 正負が混合するならば$P$で極値をとらず, 鞍点
+\end{enumerate}
+となる.
+\end{thm}
+この主張は定理\ref{thm:tmu2025-a}の$n=2$の場合と一致する. 実際,
+\begin{align*}
+\varphi_{H_f(P)}(\lambda) &= \det (\lambda E - H_f(P))\\
+                           & = (\lambda - f_{xx}(P))(\lambda - f_{yy}(P)) - (f_{xy}(P))^2\\
+			 & = \lambda^2 - (f_{xx}(P)+f_{yy}(P))\lambda + f_{xx}(P)f_{yy}(P) - (f_{xy}(P))^2
+\end{align*}
+
+なので
+
+\begin{align*}
+H_f(P)\text{の固有値がすべて正} 
+& \iff 
+\left\{
+\begin{array}{l}
+\varphi_{H_f(P)}(0) > 0\\
+\frac{f_{xx}(P)+f_{yy}(P)}{2} > 0
+\end{array}
+\right. \\
+& \iff
+\left\{
+\begin{array}{l}
+f_{xx}(P)f_{yy}(P) - (f_{xy}(P))^2 > 0\\
+{f_{xx}(P)+f_{yy}(P)}> 0
+\end{array}
+\right.\\
+& \iff
+\left\{
+\begin{array}{l}
+|H_f(P)| > 0\\
+f_{xx}(P) > 0
+\end{array}
+\right.
+\end{align*}
+となる\footnote{$|H_f(P)| > 0$のもとで$f_{xx}(P), f_{yy}(P)$は同符号である}. 他の場合についても同様にわかる.
+\begin{marker}
+$A \in M_n(\R)$を対称行列とすると
+\[
+b_A : \R^n \times \R^n \to \R\:; (\bm{x}, \bm{y}) \mapsto {}^t\!\bm{x}A\bm{y}
+\]
+は対称形式になり\footnote{これは逆も成り立つのであった. すなわち基底を固定することで対象形式は行列で表される.}, さらに 
+\begin{enumerate}
+\item[(1)] $\forall \bm{x} \in \R^n \setminus \{\bm{0}\}.\,\, b(\bm{x}, \bm{x}) > 0$ 
+\end{enumerate}
+が成り立つとき, $A$は\textbf{正定値} (行列)\footnote{$-A$が正定値のとき, $A$を\textbf{負定値}という.}であるという. このことは
+\begin{enumerate}
+\item[(2)] 主小行列 (左上の$k \times k$行列) の行列式がすべて正
+\item[(3)] $A$の固有値がすべて正
+\end{enumerate}
+であることと同値である. したがって\ref{thm:tmu2025-b}は「$H_f(P)$が正定値ならば$P$で極小」という主張であり, $n$が大きい場合は固有値を調べるのが大変なので, (2)主小行列を用いるとよい. \ref{thm:tmu2025-b}に(2)の言い換えを用いると, ただちに\ref{thm:tmu2025-a}が従う.
+\end{marker}
+$\R^2$はコンパクトでないので, 極大値を求めただけでは最大値の存在まではいえない. 最大値を求める手段として
+\begin{itemize}
+\item 直接評価して, その上界を達成する点を見つける
+\item 無限遠の挙動から十分大きいコンパクト集合をとり, 内部での極値と境界を調べる
+\end{itemize}
+ことが挙げられる. 今回は$e^{-x^2 - y^2}$の形から極座標変換を使いたくなるのは自然であり, 直接評価するのが簡単だろう.
+\begin{kaitou}[(2)の解]
+$\R^2$上で
+\begin{align*}
+f(x, y) = (2x^2 + y^2)e^{-x^2-y^2} &\le 2(x^2 + y^2)e^{-x^2 - y^2}\\
+& = 2r^2e^{-r^2} \eqcolon \tilde{f}(r)
+\end{align*}
+が成り立つ. ここで$r = \sqrt{x^2 + y^2}$と変数変換した.
+\[
+\tilde{f}'(r) = 4r(1-r^2)e^{-r^2}
+\]
+より$\tilde{f}$は$r=1$で最大値を達成するから
+\[
+\sup_{\R^2} f(x, y) \le \tilde{f}(1) = \dfrac{2}{e}
+\]
+が成り立つ. (1)より$f(\pm 1, 0) = \frac{2}{e}$なので$f$の最大値が存在して, $\displaystyle{\max_{\R^2}f(x, y)} = \boxed{\frac{2}{e}}$\,である.
+\end{kaitou}
+後者の方法でも最大値の存在を示すことはできるが, 具体的な値を求めようとすると, 結局上の解答と同じ評価が必要になる. しかしせっかくなので, 定義域をコンパクト集合とその外に分ける議論にも慣れておこう.
+\begin{kaitou}[(2)の(部分的な)別解]
+\[
+\lim_{\|(x, y)\| \to \infty} f(x, y) = 0
+\]
+なので, 十分大きな$R > 1$をとり, $B(0, R) \coloneq \{(x, y) \in \R^2 \mid x^2 + y^2 \le R^2\}$と定めれば
+\begin{align}
+f(x, y) < \frac{2}{e}\quad \text{in}\quad\R^2 \setminus B(0, R) \label{tmu2025-3d}
+\end{align}
+が成り立つ. $f$は連続関数かつ$B(0, R)$はコンパクトなので$\max_{B(0, R)} f$が存在し, $f(\pm1, 0) = \frac{2}{e}$と\eqref{tmu2025-3d}より
+\[
+\max_{(x, y) \in \R^2} f(x, y) = \max_{(x, y) \in B(0, R)} f(x, y)
+\]
+が成り立つ.
+\end{kaitou}
+(3)は独立した問であり, 極座標変換してから累次積分すればよい.
+\begin{kaitou}[(3)の解]
+極座標変換$\Phi : (r, \theta) \mapsto (r\cos\theta, r\sin\theta) = (x, y)$を用いれば, Fubiniの定理より
+\begin{align*}
+\iint_{\R^2}f(x, y)\,dxdy = \int_0^{2\pi} \int_0^\infty f(r\cos\theta, r\sin\theta)\cdot r\,drd\theta &= \int_0^{2\pi} \int_0^\infty (\cos^2\theta + 1)r^3e^{-r^2}\,drd\theta\\
+&= \left(\int_0^{2\pi} (\cos^2\theta + 1)\,d\theta \right)\left(\int_0^\infty r^3e^{-r^3}\,dr\right)
+\end{align*}
+が成り立ち\footnote{大学初年級の微積分学の知識で厳密に解くためには, 一旦有限区間で止めてFubiniの定理\ref{thm:tmu2026-4k}を用いてから極限を考えるべきである. もちろん一般のFubiniの定理\ref{thm:Fubini}を用いて, そのまま累次積分してもよい.}, 
+\begin{align*}
+&\int_0^{2\pi}  (\cos^2\theta + 1)\,d\theta = \int_0^{2\pi} \dfrac{3+\cos 2\theta}{2}\,d\theta = \left[\frac{3}{2}\theta\right]_0^{2\pi} = 3\pi\\
+&\int_0^\infty r^3e^{-r^2}\,dr = \frac{1}{2}\int_0^\infty e^{-t}\,dt = -\frac{1}{2}\left[e^{-t}\right]_0^\infty = \frac{1}{2}
+\end{align*}
+である. 後者の積分では$t = r^2$と変数変換した. したがって
+\[
+\iint_{\R^2}f(x, y)\,dxdy = \left(\int_0^{2\pi} (\cos^2\theta + 1)\,d\theta \right)\left(\int_0^\infty r^3e^{-r^3}\,dr\right) = \boxed{\frac{3\pi}{2}}
+\]
+\end{kaitou}
+Gauss積分を認めてしまえば, 実は変数変換しなくても解ける.
+\begin{kaitou}[(3)の別解]
+$f(\pm x, \pm y) = f(x, y)$とFubiniの定理\ref{thm:Fubini}より
+\begin{align*}
+\iint_{\R^2} f(x, y)\,dxdy &= 4\int_0^\infty\int_0^\infty (2x^2 + y^2)e^{-x^2 - y^2}\,dxdy\\
+ &= 4\int_0^\infty e^{-y^2} \left(\int_0^\infty 2x^2e^{-x^2}dx + y^2\int_0^\infty e^{-x^2}\,dx \right)\,dy\\
+&= 8\left(\int_0^\infty x^2e^{-x^2}\,dx\right)\left(\int_0^\infty e^{-y^2}\,dy \right)+4\left(\int_0^\infty e^{-x^2}\,dx\right)\left(\int_0^\infty y^2e^{-y^2}\,dy\right) \\
+&= 12\left(\int_0^\infty e^{-x^2}\,dx\right)\left(\int_0^\infty x^2e^{-x^2}\,dx\right)\\
+&= 6\sqrt{\pi}\int_0^\infty x^2e^{-x^2}dx
+\end{align*}
+ここにGauss積分
+\[
+\int_0^\infty e^{-x^2}\,dx = \dfrac{\sqrt{\pi}}{2}
+\]
+を用いた. さらに部分積分して再びGauss積分の結果を使えば
+\begin{align*}
+\int_0^\infty x^2e^{-x^2}\,dx &= \int_0^\infty x\cdot xe^{-x^2}\,dx\\
+&= \left[x\cdot \left(-\dfrac{1}{2}e^{-x^2}\right)\right]_0^{\infty} - \int_0^\infty \left(-\dfrac{1}{2}e^{-x^2}\right)\,dx\\
+&= \dfrac{1}{2}\int_0^\infty e^{-x^2}\,dx\\
+&= \dfrac{\sqrt{\pi}}{4}
+\end{align*}
+がわかる. したがって
+\[
+\iint_{\R^2} f(x, y)\,dxdy = 6\sqrt{\pi} \cdot \dfrac{\sqrt{\pi}}{4} = \boxed{\dfrac{3\pi}{2}}
+\]
+を得る.
+\end{kaitou}
+
+\subsection{問題4}
+\begin{problem}
+\textbf{TMU2025年度I 問題4.}\\
+区間$I$を$I=[0,+\infty)$とし，正の整数$n$に対して$I$上の関数$f_n:I\to\R$を
+\[
+f_n(x)=\sqrt{x}\,n e^{-n^6x^4}
+\]
+で定義する．このとき，以下の問いに答えよ．
+
+\begin{enumerate}[label=(\arabic*)]
+    \item 関数$g(x)=xe^{-x^2}$が$I$上で有界であることを示せ．
+    
+    \item 関数項級数
+    $\displaystyle{\sum_{n=1}^{\infty}f_n}$
+    が$I$上で各点収束することを示せ．
+    
+    \item 関数項級数
+    $\displaystyle{\sum_{n=1}^{\infty}f_n
+    }$
+    が$I$上で一様収束しないことを示せ．
+\end{enumerate}
+\end{problem}
+\begin{kaitou}[(1)の解]
+$g'(x)=e^{-x^2}(1-2x^2)$かつ$\displaystyle\lim_{x\to\infty}g(x)=0$より，増減表は次の様：
+\[
+\begin{array}{c||c|c|c|c|c}
+x
+& 0
+& \cdots
+& \dfrac{1}{\sqrt{2}}
+& \cdots
+& (\infty)\ 
+\\ \hline
+g'(x)
+&
+& +
+& 0
+& -
+&
+\\ \hline
+g(x)
+& 0
+& \nearrow
+& \dfrac{1}{\sqrt{2e}}
+& \searrow
+& (0)
+\end{array}
+\]
+よって，任意の$x\in I$に対して
+\begin{align}
+0\leq g(x)\leq \frac{1}{\sqrt{2e}} \label{tmu2025-4a}
+\end{align}
+が成り立つから，$g$は$I$上で有界である．
+\end{kaitou}
+各点収束をいうときには比較定理が基本であり, それから導かれる\textit{Cauchy}の判定法も重要である. 今回は(1)が誘導になっており, $g$の形を作り出すことで直接評価できる.
+\begin{kaitou}[(2)の解]
+$a \in I \setminus \{0\}$を固定する. このとき
+\begin{align*}
+&0 \le f_n(a) = \sqrt{a}ne^{-n^6a^4} = \frac{1}{a^\frac{3}{2}n^2}g(a^2n^3), \\
+&\sum_{n = 1}^N \frac{1}{a^\frac{3}{2}n^2}g(a^2n^3) \le \frac{1}{a^\frac{3}{2}\sqrt{2e}} \sum_{n = 1}^N \frac{1}{n^2} \to \frac{1}{a^\frac{3}{2}\sqrt{2e}}\cdot \frac{\pi^2}{6}\qquad(N \to \infty)
+\end{align*}
+が成り立つ. したがって$S_N = \displaystyle{\sum_{n=1}^{N}f_n}$とすれば, $\{S_N(a)\}_{N=1}^\infty$は単調増加かつ上に有界なので収束する. また$x = 0$のとき$f_n(0) = 0$より$\displaystyle{\sum_{n=1}^{\infty}f_n(0) = 0}$であるから, $\displaystyle{\sum_{n=1}^{\infty}f_n}$は$I$上各点収束する.
+\end{kaitou}
+最後の議論は比較定理として次の主張にまとめられる.
+\begin{thm}{比較定理}{}
+$\displaystyle{\sum_{n=1}^\infty a_n} , \displaystyle{\sum_{n=1}^\infty b_n}$を正項級数\footnote{任意の$n \in \N$について$a_n \ge 0$のとき, $\displaystyle{\sum_{n=1}^\infty a_n}$を\textbf{正項級数}という.}とする. このとき以下が成り立つ.
+\begin{enumerate}[label=(\alph*)]
+\item 任意の$n \in \N$について$a_n \le b_n$が成り立ち, かつ$\displaystyle{\sum_{n=1}^\infty b_n}$が収束するならば, $\displaystyle{\sum_{n=1}^\infty a_n}$は収束する.
+\item 任意の$n \in \N$について$a_n \le b_n$が成り立ち, かつ$\displaystyle{\sum_{n=1}^\infty a_n}$が発散するならば, $\displaystyle{\sum_{n=1}^\infty b_n}$は発散する.
+\end{enumerate}
+\end{thm}
+\begin{proof}
+(a)の証明は上と同じである. (b)について : もし$\displaystyle{\sum_{n=1}^\infty b_n}$が収束するならば, (a)より$\displaystyle{\sum_{n=1}^\infty a_n}$は収束するので, 矛盾する.
+\end{proof}
+(3)は$\displaystyle{\sum_{n=1}^{\infty}f_n}$が一様収束\textbf{しないこと}を示す問題である. 試験で頻出のM-テストは「関数項級数の一様収束についての十分条件」しか与えないので, 今回はお呼びでない. 一様収束しないということは定義域内に``まずいところ''があることに他ならないので, まずは$f_n$を微分して概形を調べてみるとよい.
+\begin{kaitou}[(3)の解]
+$\displaystyle{f_n'(x) = \frac{n}{2\sqrt{x}}e^{-n^6x^4}(1 - 8n^6x^4)}$より, $f_n(x)$の増減表は次の様 : 
+\[
+\begin{array}{c||c|c|c|c|c}
+x
+& 0
+& \cdots
+& \sqrt[4]{\frac{1}{8n^6}}
+& \cdots
+& (\infty)\ 
+\\ \hline
+f_n'(x)
+&
+& +
+& 0
+& -
+&
+\\ \hline
+f_n(x)
+& 0
+& \nearrow
+& \sqrt[8]{\frac{n^2}{8e}}
+& \searrow
+& (0)
+\end{array}
+\]
+よって, 任意の$x \in I$に対して
+\begin{align}
+0 \le f_n(x) \le \sqrt[8]{\frac{n^2}{8e}} \label{tmu2025-4c}
+\end{align}
+が成り立つ. このとき
+\begin{align*}
+\sup_{x \in I}\left|\sum_{n=1}^{\infty}f_n(x) - \sum_{n=1}^{N}f_n(x)\right| 
+\ge \sup_{x \in I} f_{N+1}(x) &\stackrel{\eqref{tmu2025-4c}}{=} \sqrt[8]{\frac{(N+1)^2}{8e}} \\
+&\to \infty \qquad(N \to \infty)
+\end{align*}
+なので, $\displaystyle{\sum_{n=1}^{\infty}f_n}$は一様収束しない.
+\end{kaitou}
+一般に次のことがいえる : 
+\begin{thm}{関数項級数の一様収束}{}
+関数項級数$\displaystyle{\sum_{n=1}^\infty f_n}$が$I$上一様収束するならば, $f_n$は$I$上$0$に一様収束する.
+\end{thm}
+\begin{proof}
+第$N$部分和を$S_N$, $S = \displaystyle{\sum_{n=1}^\infty f_n}$とする. 仮定より$I$上$S_{N} \rightrightarrows S, S_{N+1} \rightrightarrows S$なので, 
+\begin{align*}
+\sup_{x \in I}|f_{N+1}(x)| &=\sup_{x\in I}|S_{N+1}(x) - S_{N}(x)|\\ &\le \sup_{x \in I}|S_{N+1}(x) - S(x)| + \sup_{x \in I}|S(x) - S_N(x)|\qquad(\text{三角不等式より})\\
+&\to 0\qquad(N \to \infty)
+\end{align*}
+が成り立つ. これは$I$上$f_n \rightrightarrows 0$であることに他ならない.
+\end{proof}
 \section{2022年度}
 \subsection{問題1}
 \begin{problem}
@@ -2462,8 +3186,8 @@ B=
     \item (2)で求めた$a$の値それぞれに対し，$P^{-1}AP,\ P^{-1}BP$がともに対角行列となる正則行列$P$を$1$つ求めよ．
 \end{enumerate}
 \end{problem}
-\begin{kaitou}{(1)の解}
-$A$の固有多項式$\phi(\lambda) = (\lambda-2)(\lambda-3)^2$なので, $A$の固有値は\boxed{2, 3(\text{重複度}2)}である. また\uline{$A$の$2$対する固有ベクトル}は
+\begin{kaitou}[(1)の解]
+$A$の固有多項式$\phi(\lambda) = (\lambda-2)(\lambda-3)^2$なので, $A$の固有値は\boxed{2, 3(\text{重複度}2)}\,である. また\uline{$A$の$2$対する固有ベクトル}は
 \[
 A - 2E = 
 \begin{pmatrix}
@@ -2487,7 +3211,7 @@ A - 2E =
 -1
 \end{pmatrix}
 \]
-として\boxed{V_2^\alpha = \langle \bm{q}_1 \rangle}である. \uline{$A$の$3$に対する固有ベクトル}は
+として\boxed{V_2^A = \langle \bm{q}_1 \rangle}\,である. \uline{$A$の$3$に対する固有ベクトル}は
 \[
 A - 3E =
 \begin{pmatrix}
@@ -2517,9 +3241,9 @@ A - 3E =
 -2
 \end{pmatrix}
 \]
-として\boxed{V_3^\alpha = \langle \bm{q}_2,\,\bm{q}_3 \rangle}である. 
+として\boxed{V_3^A = \langle \bm{q}_2,\,\bm{q}_3 \rangle}\,である. 
 \end{kaitou}
-\begin{kaitou}{(2)の解}
+\begin{kaitou}[(2)の解]
 同時対角化可能であることと可換であることは同値だったので,
 \begin{align*}
 AB = 
@@ -2558,14 +3282,197 @@ BA =
 -6 & 4a - 10 & -6
 \end{pmatrix}
 \end{align*}
-より\boxed{a = 2}が同時対角化可能であることの必要十分条件である.
+より\boxed{a = 2}\,が同時対角化可能であることの必要十分条件である.
 \end{kaitou}
 \begin{dfn}{同時対角化可能}{}
+$A, B \in M_n(\C)$について, ある正則行列$P \in M_n(\C)$が存在して$P^{-1}AP, P^{-1}BP$が共に対角行列になるとき, $A, B$は\textbf{同時対角化可能}であるという.
 \end{dfn}
-\begin{thm}{同時対角化可能性}{}
-$A, B$が同時対角化可能である $\iff$ $A, B$は可換である (i.e. $AB = BA$)
+同時対角化可能であることの同値条件を与えるために, 準備として次の問題を解こう : 
+\begin{problem}
+\textbf{立教2026年度・春季-[2]}\\
+$n$を$2$以上の自然数とし, $A, B$を$AB=BA$を満たす複素数を成分とする$n$次正方行列とする. ただし, $A\neq O$かつ$B\neq O$とする. このとき, 以下の問に答えよ.
+
+\begin{enumerate}[label=(\roman*)]
+\item
+$A$の固有値$\alpha$に対する固有空間を$V_\alpha$とする.
+このとき, $B$が定める$\mathbb{C}^n$上の線形写像
+\[
+B\colon \mathbb{C}^n\longrightarrow \mathbb{C}^n,
+\qquad
+x\longmapsto Bx
+\]
+を$V_\alpha$上に制限したものは, $V_\alpha$上の自己線形写像となることを示せ.
+
+\item
+$A, B$は共通の固有ベクトルを持つことを示せ.
+\item
+$A, B$がどちらも対角化可能であるならば, 同時対角化可能であることを示せ.
+\end{enumerate}
+\end{problem}
+\begin{proof}
+(i)では, 任意の$\bm{x} \in V_\alpha$について$B\bm{x} \in V_\alpha$を示せばよい\footnote{$A, B$が可換なとき, $V_\alpha$が$B$-不変であることを示す問題である.}. 実際, $\bm{x} \in V_\alpha$のとき$A\bm{x} = \alpha\bm{x}$だから
+\begin{align*}
+A(B\bm{x}) = (AB)\bm{x} = (BA)\bm{x} = B(A\bm{x}) = B(\alpha\bm{x}) = \alpha (B\bm{x})
+\end{align*}
+が成り立ち, $B\bm{x} \in V_\alpha$がわかる.
+
+(ii)\,$\dim V_\alpha = \ell$とする. このとき$V_\alpha$の基底として$\displaystyle{\{\bm{q}_j\}_{j = 1}^\ell}\,\,(\bm{q}_j \in \C^n)$がとれる. (i)よりある$B_\alpha \in M_\ell(\C)$が存在して
+\begin{align}
+B(\bm{q}_1\,\,\bm{q}_2\, \cdots \, \bm{q}_\ell) &=  (B\bm{q}_1\,\,B\bm{q}_2\, \cdots \, B\bm{q}_\ell) \notag \\
+&\stackrel{(\text{i})}{=} (\bm{q}_1\,\,\bm{q}_2\, \cdots \, \bm{q}_\ell)B_\alpha \label{r2026-a}
+\end{align}
+と表される\footnote{$V=\langle \bm{q}_1, \cdots, \bm{q}_\ell \rangle$かつ$B\bm{q}_j \in V_\alpha$なので, $B\bm{q}_j$は$\{\bm{q}_i\}$の一次結合でかける. これは$B|_{V_\alpha}$が$\ell \times \ell$行列で表現できることに他ならない.}. このとき$B_\alpha$の固有値$\beta$と, $\beta$に対する固有ベクトル$\bm{r} \in \C^\ell$を1つとり, $\bm{p} \coloneq (\bm{q}_1\,\,\bm{q}_2\, \cdots \, \bm{q}_\ell)\bm{r} \in \C^n$とおけば
+\begin{align*}
+A\bm{p} &= A (\bm{q}_1\,\,\bm{q}_2\, \cdots \, \bm{q}_\ell)\bm{r}  =  (A\bm{q}_1\,\,A\bm{q}_2\, \cdots \, A\bm{q}_\ell) \bm{r} =
+ (\bm{q}_1\,\,\bm{q}_2\, \cdots \, \bm{q}_\ell)
+\begin{pmatrix}
+\alpha                                                            \\
+         & \alpha            &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & \alpha
+\end{pmatrix}
+\bm{r} = \alpha\bm{p},\\
+B\bm{p} &= B(\bm{q}_1\,\,\bm{q}_2\, \cdots \, \bm{q}_\ell)\bm{r} \stackrel{\eqref{r2026-a}}{=} (\bm{q}_1\,\,\bm{q}_2\, \cdots \, \bm{q}_\ell)B_\alpha\bm{r}= (\bm{q}_1\,\,\bm{q}_2\, \cdots \, \bm{q}_\ell)(\beta\bm{r}) = \beta\bm{p}
+\end{align*}
+が成り立つので, $A, B$の共通の固有ベクトル\footnote{$A, B$の\textbf{同時固有ベクトル}とよぶ.}の存在がいえた. (iii)は後で定理として示す.
+\end{proof}
+準備として実はもう一仕事必要である.
+\begin{thm}{特定の形の行列の対角化可能性}{tmu2026w-a}
+$B_1, B_2, \cdots, B_r$を複素正方行列とし, $B \in M_n(\C)$は次の形をしているとする : 
+\begin{align*}
+B=
+\begin{pmatrix}
+B_ 1                                                           \\
+         & B_2           &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & B_r
+\end{pmatrix}
+\end{align*}
+このとき
+\[
+B\text{が対角化可能である} \iff B_1, \cdots, B_r\text{が対角化可能である}
+\]
+が成り立つ.
 \end{thm}
-\begin{kaitou}{(3)の解}
+\begin{proof}
+(方針) $B$の固有ベクトルを$B_1, \cdots, B_r$のサイズに分けて分割し, 対角化可能性を固有空間の次元の話に落とし込んで示す.
+\end{proof}
+さて, やっとこさ準備が整ったので, 本丸に攻め込もう.
+\begin{thm}{同時対角化可能性}{}
+$A, B \in M_n(\C)$は対角化可能であるとする. このとき
+\[
+A, B\text{が同時対角化可能である} \iff A, B\text{は可換である} (\text{i.e.}\,\,AB = BA)
+\]
+が成り立つ.
+\end{thm}
+\begin{proof}
+$\Rightarrow$は簡単なので$\Leftarrow$を示す. $\alpha_1, \cdots, \alpha_r$を$A$のすべての互いに異なる固有値とする. $A$は対角化可能なので, 各$V_{\alpha_j}$の基底を順に並べた行列$Q \in M_n(\C)$によって
+\begin{align}
+Q^{-1}AQ = 
+\begin{pmatrix}
+\alpha_1E_{n_1}                                                           \\
+         & \alpha_2E_{n_2}           &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & \alpha_rE_{n_r}
+\end{pmatrix} \label{r2026-c}
+\end{align}
+とかける. ここで$n_j \coloneq \dim V_{\alpha_j}$とした. さて, (ii)と同じ議論から$B_j \in M_{n_j}(\C)$によって
+\begin{align}
+Q^{-1}BQ =
+\begin{pmatrix}
+B_ 1                                                           \\
+         & B_2           &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & B_r
+\end{pmatrix} \label{r2026-d}
+\end{align}
+とかけて, $B$は対角化可能だから定理\ref{thm:tmu2026w-a}より各$B_{j}$は対角化可能である. すなわち 各$j = 1, \cdots, r$に対して正則行列$R_j \in M_{n_j}$が存在して, 
+\begin{align}
+R_j^{-1}B_jR_j = 
+\begin{pmatrix}
+\beta_j^{(1)}                                                           \\
+         & \beta_j^{(2)}           &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & \beta_j^{(n_j)}
+\end{pmatrix} \label{r2026-e}
+\end{align}
+となる. ただし$\beta_j^{(k)}$は$B_j$の固有値とした. このとき
+\begin{align}
+R \coloneq
+\begin{pmatrix}
+R_ 1                                                           \\
+         & R_2           &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & R_r
+\end{pmatrix} \label{r2026-f}
+\end{align}
+として$P \coloneq QR$とおけば, $P$は$A, B$を同時対角化する正則行列になっている\footnote{$R$の$R_j$部分を$R_j^{-1}$に置き換えた行列が$R^{-1}$だから, $R$は正則行列である.}. 実際\eqref{r2026-c}より
+\begin{align*}
+P^{-1}AP = R^{-1}(Q^{-1}AQ)R =
+\begin{pmatrix}
+\alpha_1E_{n_1}                                                           \\
+         & \alpha_2E_{n_2}           &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & \alpha_rE_{n_r}
+\end{pmatrix}
+\end{align*}
+であり, \eqref{r2026-d}, \eqref{r2026-e}, \eqref{r2026-f}より
+\begin{align*}
+&P^{-1}BP = R^{-1}(Q^{-1}BQ)R \\ \stackrel{\eqref{r2026-d}, \eqref{r2026-f}}{=}
+&
+\begin{pmatrix}
+R_ 1^{-1}                                                           \\
+         & R_2 ^{-1}          &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & R_r^{-1}
+\end{pmatrix}
+\begin{pmatrix}
+B_ 1                                                           \\
+         & B_2           &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & B_r
+\end{pmatrix}
+\begin{pmatrix}
+R_ 1                                                           \\
+         & R_2           &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & R_r
+\end{pmatrix}\\
+=
+&
+\begin{pmatrix}
+R_ 1^{-1}B_1R_1                                                       \\
+         & R_2 ^{-1} B_2 R_2         &        & \text{\huge{0}}   \\
+         &                      & \ddots                       \\
+         & \text{\huge{0}} &        & \ddots             \\
+         &                      &        &           & R_r^{-1}B_rR_r
+\end{pmatrix}\\
+\stackrel{\eqref{r2026-e}}{=}
+&
+\begin{pmatrix}
+\beta_1^{(1)}                                                      \\
+            & \ddots                 &        &        &        & \text{\huge{0}} \\
+            &                        & \beta_1^{(n_1)}              \\
+            &                        &                & \ddots    \\
+            &                        &                &           & \beta_r^{(1)} \\
+            & \text{\huge{0}}        &                &           &             & \ddots \\
+            &                        &                &           &             &        & \beta_r^{(n_r)}
+\end{pmatrix}
+\end{align*}
+が成り立つ. 
+\end{proof}
+上の証明より, $A \in M_n(\C)$が$n$個の相異なる固有値を持つとき, $A$の固有ベクトルは全て同時固有ベクトルになることがわかる. (3)のようにそうでない場合は, 証明の手順に則って$A, B$を同時対角化する正則行列$P$を求める必要がある.
+\begin{kaitou}[(3)の解]
 $a = 2$のとき
 \[
 B = 
@@ -2575,21 +3482,15 @@ B =
 -2 & 0 & -1
 \end{pmatrix}
 \]
-であり, $Q = \left( \bm{q}_1\,\bm{q}_2\,\bm{q}_3 \right)$とすれば
+であり, $Q = \left( \bm{q}_1\,\bm{q}_2\,\bm{q}_3 \right)$とおけば
 \begin{align}
-Q^{-1} &=
-\begin{pmatrix}
-0 & -2 & -3\\
-1 & 2 & 3\\
-0 & 1 & 1
-\end{pmatrix},\\
-Q^{-1}AQ &= 
+Q^{-1}AQ& = 
 \begin{pmatrix}
 2 & 0 & 0\\
 0 & 3 & 0\\
 0 & 0 & 3
 \end{pmatrix}
-,\\
+, \label{eq:tmu2026w-1}\\
 Q^{-1}BQ &=
 \begin{pmatrix}
 0 & -2 & -3\\
@@ -2613,17 +3514,128 @@ Q^{-1}BQ &=
 0 & 4 & -6\\
 0 & 1 & -1
 \end{array}
-\right)\\
+\right) \label{eq:tmu2026w-2}
 \end{align}
 である.
 \[
-B = 
+B_2 \coloneq
 \begin{pmatrix}
 4 & -6\\
 1 & -1
 \end{pmatrix}
 \]
-として$B$を対角化すれば
+として$B_2$を対角化しよう : 固有値は$1, 2$, 固有空間は
+\begin{align*}
+V_1^{B_2} = 
+\left\langle
+\begin{pmatrix}
+2\\
+1
+\end{pmatrix}
+\right\rangle,\qquad
+V_{2}^{B_2} = 
+\left\langle
+\begin{pmatrix}
+3\\
+1
+\end{pmatrix}
+\right\rangle
+\end{align*}
+なので, 
+\[
+R_2 \coloneq 
+\begin{pmatrix}
+2 & 3\\
+1 & 1
+\end{pmatrix}
+\]とすれば
+\begin{align}
+R_2^{-1}B_2R_2 = 
+\begin{pmatrix}
+1 & 0\\
+0 & 2
+\end{pmatrix} \label{eq:tmu2026w-3}
+\end{align}
+となる. さてこのとき
+\begin{align*}
+R \coloneq
+\left(
+\begin{array}{cc}
+1 & \bm{0} \\
+\bm{0} & 
+\begin{matrix}
+R_{2}
+\end{matrix}
+\end{array}
+\right),\qquad P \coloneq QR
+\end{align*}
+とおくことで, \eqref{eq:tmu2026w-1}, \eqref{eq:tmu2026w-2}, \eqref{eq:tmu2026w-3}から
+\begin{align*}
+P^{-1}AP& = R^{-1}(Q^{-1}AQ)R = 
+\begin{pmatrix}
+2 & 0 & 0\\
+0 & 3 & 0\\
+0 & 0 & 3
+\end{pmatrix},\\
+P^{-1}BP & =  R^{-1}(Q^{-1}BQ)R 
+= 
+\left(
+\begin{array}{cc}
+1 & \bm{0} \\
+\bm{0} & 
+\begin{matrix}
+R_{2}^{-1}
+\end{matrix}
+\end{array}
+\right)
+\left(
+\begin{array}{cc}
+1 & \bm{0} \\
+\bm{0} & 
+\begin{matrix}
+B_{2}
+\end{matrix}
+\end{array}
+\right)
+\left(
+\begin{array}{cc}
+1 & \bm{0} \\
+\bm{0} & 
+\begin{matrix}
+R_{2}
+\end{matrix}\\
+\end{array}
+\right)
+= 
+\begin{pmatrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0 & 2
+\end{pmatrix}
+\end{align*}
+のように, $A, B$は
+\[
+P =
+\begin{pmatrix}
+1 & 1 & 0\\
+1 & 0 & 3\\
+-1 & 0 & -2
+\end{pmatrix}
+\begin{pmatrix}
+1 & 0 & 0\\
+0 & 2 & 3\\
+0 & 1 & 1
+\end{pmatrix}
+=
+\boxed{
+\begin{pmatrix}
+1 & 2 & 3\\
+1 & 3 & 3\\
+-1 & -2 & -2
+\end{pmatrix}
+}
+\]
+によって同時対角化できる.
 \end{kaitou}
 \subsection{2015年度数学I 問題1}
 \begin{problem}
@@ -2781,6 +3793,297 @@ $\frac{1}{1 + x^2}$を部分分数分解する :
 \end{kaitou}
 \section{Appendix}
 \subsection{お茶女}
+\subsubsection{お茶の水女子大学2026年度}
+\begin{problem}
+\textbf{お茶女2026年度夏季 問題2-[2]}\\
+$A = \displaystyle{
+\begin{pmatrix}
+1 & -1\\
+2 & 3
+\end{pmatrix}
+}$
+とする. このとき, $P^{-1}AP =
+\begin{pmatrix}
+a & -b\\
+b & a
+\end{pmatrix}$
+となるような実正則行列$P$と実数$a, b$を一組求めよ.
+\end{problem}
+\begin{kaitou}
+$A$の固有多項式は$\phi_A(\lambda) = \{\lambda - (2 + i)\}\{\lambda - (2 - i)\}$であり, \uline{固有値$2+i$に対する固有ベクトル}は
+\[
+A - (2 + i)E = 
+\begin{pmatrix}
+-1-i & -1\\
+2 & 1-i
+\end{pmatrix}
+\to
+\begin{pmatrix}
+1+i & 1\\
+0 & 0
+\end{pmatrix}
+\]
+より
+\[
+\bm{u} = 
+\begin{pmatrix}
+-1\\
+1+i
+\end{pmatrix}
+\]
+である. また$A$は実行列なので
+\[
+A\overline{\bm{u}} = \overline{A\bm{u}} = \overline{(2 + i)\bm{u}} = (2-i)\overline{\bm{u}}
+\]
+となり, \uline{固有値$2-i$に対する固有ベクトル}は$\overline{\bm{u}}$である. 以下, 簡単のため$\mu = 2+i$とおく. このとき
+\begin{align*}
+\bm{p}_1 &= \dfrac{1}{\sqrt{2}}(\bm{u} + \overline{\bm{u}}) = \dfrac{1}{\sqrt{2}}
+\begin{pmatrix}
+-2\\
+2
+\end{pmatrix}, \\
+\bm{p}_2 &= \dfrac{i}{\sqrt{2}}(\bm{u} - \overline{\bm{u}}) = \dfrac{1}{\sqrt{2}}
+\begin{pmatrix}
+0\\
+-2
+\end{pmatrix}
+\end{align*}
+とおけば, $\bm{p}_1, \bm{p}_2$は一次独立である. 実際$\alpha\bm{p}_1 + \beta\bm{p}_2 = \bm{0}\,\,(\alpha, \beta \in \C)$のとき$\frac{1}{\sqrt{2}}(\alpha + i\beta)\bm{u} + \frac{1}{\sqrt{2}}(\alpha - i\beta)\overline{\bm{u}} = \bm{0}$であり, $\bm{u}, \overline{\bm{u}}$は一次独立だったから, $\alpha = \beta = 0$が従う. また
+\begin{align}
+A\bm{p}_1 &= \dfrac{1}{\sqrt{2}}(\mu\bm{u} + \overline{\mu}\overline{\bm{u}}) = 2\cdot\dfrac{1}{\sqrt{2}}(\bm{u} + \overline{\bm{u}}) + \dfrac{i}{\sqrt{2}}(\bm{u}- \overline{\bm{u}}) = 2\bm{p}_1+\bm{p}_2 \label{eq:otya2026-1} \\
+A\bm{p}_2 & = \dfrac{i}{\sqrt{2}}(\mu\bm{u} - \overline{\mu}\overline{\bm{u}}) = 2\cdot\dfrac{i}{\sqrt{2}}(\bm{u} - \overline{\bm{u}}) - \dfrac{1}{\sqrt{2}}(\bm{u}+ \overline{\bm{u}}) = 2\bm{p}_2 - \bm{p}_1 \label{eq:otya2026-2}
+\end{align}
+なので, $P = (\bm{p}_1\,\bm{p}_2)$とすれば$P$は正則行列で, \eqref{eq:otya2026-1}, \eqref{eq:otya2026-2}から
+\begin{align*}
+AP = (A\bm{p}_1\, A\bm{p}_2) = (\bm{p}_1\,\bm{p}_2)
+\begin{pmatrix}
+2 & -1\\
+1 & 2
+\end{pmatrix}
+\end{align*}
+が成り立ち, これが求めたい形に他ならない. よって
+\boxed{
+P = \dfrac{1}{\sqrt{2}}
+\begin{pmatrix}
+-2 & 0\\
+2 & -2
+\end{pmatrix},\quad a = 2, b=1
+}
+\end{kaitou}
+「$A$はユニタリ対角化可能$\iff A$は正規行列」に対し, 実行列の範囲では「$A$は直交対角化可能$\iff A$は対称行列」であった. この非対称性が気になるところだが, 実正規行列は直交行列によって(上の問と同じく固有値の実部と虚部を並べた)対角行列とは限らない標準形と相似になる.
+\begin{thm}{定理 : 実正規行列の標準形}{}
+\end{thm}
+\subsubsection{お茶の水女子大学2025年度}
+\begin{problem}
+\textbf{お茶女2025年度夏季 問題2-[2]}
+\begin{enumerate}[label=(\arabic*)]
+    \item 次の行列$A$の階数$r$を求め，$PAQ=
+    \begin{pmatrix}
+        I_r & O_1\\
+        O_2 & O_3
+    \end{pmatrix}$
+    となる$3$次正則行列$P,Q$を$1$組求めよ．ただし，$I_r$は$r$次単位行列，$O_1$は$r\times(3-r)$零行列，$O_2$は$(3-r)\times r$零行列，$O_3$は$(3-r)\times(3-r)$零行列である．
+    \[
+    A=
+    \begin{pmatrix}
+        2 & 1 & 3\\
+        1 & 0 & 1\\
+        4 & 1 & 5
+    \end{pmatrix}
+    \]
+
+    \item $A$を$n$次正方行列とする．$ABA=A$となる$n$次正則行列$B$が存在することを示せ．また，そのような$n$次正則行列$B$がただ$1$つのとき，$A$は正則行列となることを示せ．
+\end{enumerate}
+\end{problem}
+\begin{kaitou}[(1)の解]
+まず$A$を行基本変形する : 
+\begin{align}
+\begin{pmatrix}
+2 & 1 & 3\\
+1 & 0 & 1\\
+4 & 1 & 5
+\end{pmatrix}
+&\to
+\begin{pmatrix}
+0 & 1 & 1\\
+1 & 0 & 1\\
+0 & 1 & 1
+\end{pmatrix}
+&&(\text{$1$行目に$(-2)\times$(2行目), $3$行目に$(-4)\times$($2$行目)を足した}) \label{eq:otya2025-1} \\
+&\to
+\begin{pmatrix}
+0 & 1 & 1\\
+1 & -1 & 0\\
+0 & 0 & 0
+\end{pmatrix}
+&&(\text{$2$行目に$(-1)\times$($1$行目), $3$行目に$(-1)\times$($1$行目)を足した})　\label{eq:otya2025-2} \\
+&\to
+\begin{pmatrix}
+1 & -1 & 0\\
+0 & 1 & 1\\
+0 & 0 & 0
+\end{pmatrix}
+&&(\text{$1, 2$行目を入れ替えた}) \label{eq:otya2025-3}
+\end{align}
+さらに列基本変形を施して, 目標の形にする :
+\begin{align}
+\begin{pmatrix}
+1 & -1 & 0\\
+0 & 1 & 1\\
+0 & 0 & 0
+\end{pmatrix}
+&\to
+\begin{pmatrix}
+1 & 0 & 0\\
+0 & 1 & 1\\
+0 & 0& 0
+\end{pmatrix}
+&&(\text{$2$列目に$1$列目を足した}) \label{eq:otya2025-4}\\
+&\to
+\begin{pmatrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0& 0
+\end{pmatrix}
+&&(\text{$3$列目に$(-1)\times$($2$列目)を足した}) \label{eq:otya2025-5}
+\end{align}
+行基本変形は左側から基本行列を掛けること, 列基本変形は右側から基本行列を掛けることに対応するので\footnote{正確には以下の行列は基本行列でなく, 一度に複数の操作をまとめている.}, \eqref{eq:otya2025-1},\eqref{eq:otya2025-2},\eqref{eq:otya2025-3}に対応する行列を右から並べて掛けた
+\[
+P = 
+\begin{pmatrix}
+0 & 1 & 0\\
+1 & 0 & 0\\
+0 & 0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+1 & 0 & 0\\
+-1 & 1 & 0\\
+-1 & 0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+1 & -2 & 0\\
+0 & 1 & 0\\
+0 & -4 & 1
+\end{pmatrix}
+\]
+および\eqref{eq:otya2025-4},\eqref{eq:otya2025-5}に対応する行列を左から並べて掛けた
+\[
+Q = 
+\begin{pmatrix}
+1 & 1 & 0\\
+0 & 1 & 0\\
+0 & 0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+1 & 0 & 0\\
+0 & 1 & -1\\
+0 & 0 & 1
+\end{pmatrix}
+\]
+すなわち
+\begin{answerbox}
+\[
+P = 
+\begin{pmatrix}
+-1 & 3 & 0\\
+1 & -2 & 0\\
+-1 & -2 & 1
+\end{pmatrix}, \qquad
+Q = 
+\begin{pmatrix}
+1 & 1 & -1\\
+0 & 1 & -1\\
+0 & 0 & 1
+\end{pmatrix}
+\]
+\end{answerbox}
+によって
+\[
+PAQ = 
+\begin{pmatrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0& 0
+\end{pmatrix}
+\]
+となる.
+\end{kaitou}
+\begin{dfn}{基本行列}{}
+次の3種類の正則行列を\textbf{基本行列}という. ただし他の成分は単位行列に等しく, かつ$i \ne j$とする. 
+\begin{enumerate}[label=(\arabic*)]
+\item $P(i; \lambda)\quad(i, i)$成分が$\lambda (\ne 0)$,
+\item $Q(i, j)\quad (i, j), (j, i)$成分が1, $(i, i), (j, j)$成分が0,
+\item $R(i, j;\lambda) \quad(i, j)$成分が$\lambda$
+\end{enumerate}
+\end{dfn}
+基本表列を右から掛けるとき, $P(i; \lambda)$は$i$行目を$\lambda$倍すること, $Q(i, j)$は$i, j$行を入れ替えること, $R(i, j;\lambda)$は$i$行目に$\lambda\times$($j$行目)を加えることに対応する. これと同様に, 左から掛けるときは列基本変形に対応する.
+\begin{marker}
+上の問で, たとえば\eqref{eq:otya2025-3}に対応する基本行列は
+\[
+Q(1, 2)=
+\begin{pmatrix}
+0 & 1 & 0\\
+1 & 0 & 0\\
+0 & 0 & 1
+\end{pmatrix}
+\]
+であり, \eqref{eq:otya2025-4}に対応する基本行列は
+\[
+R(1, 2; 1)
+=
+\begin{pmatrix}
+1 & 1 & 0\\
+0 & 1 & 0\\
+0 & 0 & 1
+\end{pmatrix}
+\]
+(左から掛けるとき, 2列目に1列目を足す行列) である. また, \eqref{eq:otya2025-1}, \eqref{eq:otya2025-2}では2回の行基本変形を一気に施しているので, それぞれ基本行列の積$R(1, 2;-2)R(3,2;-4), R(2, 1;-1)R(3, 1;-1)$が対応する.
+\end{marker}
+\begin{kaitou}[(2)の解]
+(1)で見たように, 任意の$A \in M_n(\C)$に対してある正則行列$P, Q$が存在し, 
+\[
+PAQ=
+\begin{pmatrix}
+        I_r & O_1\\
+        O_2 & O_3
+\end{pmatrix}
+\]
+とできるのであった (ただし$r = \rank A$). さて, $B \coloneq QP$とおけば
+\begin{align*}
+P(ABA)Q = P(A(QP)A)Q = (PAQ)(PAQ) = 
+    \begin{pmatrix}
+        I_r & O_1\\
+        O_2 & O_3
+    \end{pmatrix}
+\end{align*}
+なので,
+\[
+ABA =
+P^{-1}
+\begin{pmatrix}
+I_r & O_1\\
+O_2 & O_3
+\end{pmatrix}
+Q^{-1}
+= A 
+\]
+が成り立ち, 条件を満たす$B$の存在がいえる. また, $ABA = A$となる正則行列$B$が一意のとき,
+\[
+A = ABA = (ABA)BA = A(BAB)A 
+\]
+から$BAB = B$となり, $B$は正則なので$AB = I$, すなわち$A$は正則で$A^{-1} = B$がわかる.
+\end{kaitou}
+\begin{marker}
+当たり前かもしれないが, 「$A$が正則$\iff$ある$B$が存在して$AB = I$」であることを確認しておこう. $\Rightarrow$は定義通りなので, $\Leftarrow$を示す. まず$B$は全単射である. 実際, $B\bm{x} = \bm{0}$のとき
+\[
+\bm{x} = I\bm{x} = (AB)\bm{x} = A(B\bm{x}) = A\bm{0} = \bm{0}
+\]
+なので$B$は単射で, 有限次元だから全単射までいえる. このとき$\bm{x} \in \R^n$はある$\bm{y}\in \R^n$によって$B\bm{y} = \bm{x}$とかけるので,　任意の$\bm{x} \in \R^n$について
+\[
+(BA)\bm{x} = (BA)B\bm{y} = B(AB)\bm{y} = B\bm{y} = \bm{x}
+\]
+が成り立つ. したがって$BA = I$である.
+\end{marker}
 \subsection{名古屋大}
 \begin{thebibliography}{99}
 \bibitem{Karel1}
